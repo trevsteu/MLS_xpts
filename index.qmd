@@ -7,9 +7,7 @@ editor: visual
 
 # Motivation:
 
-![](images/clipboard-1227717430.png)
-
-I will write later)
+(I will write later)
 
 # Setup:
 
@@ -19,14 +17,15 @@ library(tidyverse)
 library(gt)
 library(rvest)
 library(dplyr)
+library(reactable)
 ```
 
 # Code:
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, message=FALSE}
 url <- str_glue("https://fbref.com/en/comps/22/schedule/Major-League-Soccer-Scores-and-Fixtures")
 
-n <- 1000
+n <- 1000 # number of times to simulate each game
 
 html <- read_html(url)
 data <- html |> 
@@ -52,7 +51,8 @@ for(i in 1:nrow(data)){
   away_xpts[i] <- (3 * sum(away_sim > home_sim) + sum(away_sim == home_sim))/n
 }
 
-data <- cbind(data, home_xpts, away_xpts)
+# combine table of results with simulated results
+data <- cbind(data, home_xpts, away_xpts) 
 
 xpts_table <- data |>
   pivot_longer(cols = c("home", "away"), values_to = "team") |> 
@@ -61,16 +61,19 @@ xpts_table <- data |>
          "xg_for" = ifelse(name == "home", home_xg, away_xg), 
          "xg_ag" = ifelse(name == "home", away_xg, home_xg), 
          "scored" = ifelse(name == "home", home_score, away_score), 
-         "against" = ifelse(name == "home", away_score, home_score)) |>
-  select("date", "team", "gf" = "scored", "ga" = "against", "pts", "xg_for", 
-           "xg_ag", "xpts") |> 
+         "against" = ifelse(name == "home", away_score, home_score), 
+         "pts_over_exp" = pts - xpts) |>
+  select(team, "gf" = scored, "ga" = against, pts, xg_for, 
+           xg_ag, xpts, pts_over_exp) |> 
   group_by(team) |> 
-  summarize(gp = n(), across(gf:xpts, \(x) round(mean(x), 3))) |> 
+  summarize(gp = n(), across(gf:xpts, \(x) round(mean(x), 3)), 
+            pts_over_exp = round(sum(pts_over_exp), 3)) |> 
   arrange(desc(xpts))
 ```
 
 # Results
 
 ```{r}
-gt(xpts_table)
+# use reactable to allow for interactive sorting
+reactable(xpts_table, pagination = FALSE)
 ```

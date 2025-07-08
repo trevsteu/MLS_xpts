@@ -68,6 +68,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="index_files/libs/core-js-2.5.3/shim.min.js"></script>
+
+<script src="index_files/libs/react-18.2.0/react.min.js"></script>
+
+<script src="index_files/libs/react-18.2.0/react-dom.min.js"></script>
+
+<script src="index_files/libs/reactwidget-2.0.0/react-tools.js"></script>
+
+<link href="index_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="index_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="index_files/libs/reactable-0.4.4/reactable.css" rel="stylesheet">
+
+<script src="index_files/libs/reactable-binding-0.4.4/reactable.js"></script>
+
 
 
 </head>
@@ -105,8 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="motivation" class="level1">
 <h1>Motivation:</h1>
-<p><img src="images/clipboard-1227717430.png" class="img-fluid"></p>
-<p>I will write later)</p>
+<p>(I will write later)</p>
 </section>
 <section id="setup" class="level1">
 <h1>Setup:</h1>
@@ -115,7 +130,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reactable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="code" class="level1">
@@ -123,7 +139,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">str_glue</span>(<span class="st">"https://fbref.com/en/comps/22/schedule/Major-League-Soccer-Scores-and-Fixtures"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># number of times to simulate each game</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span> </span>
@@ -138,819 +154,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(home_score <span class="sc">==</span> away_score, <span class="dv">1</span>, <span class="dv">0</span>)), </span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>         <span class="st">"away_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(away_score <span class="sc">&gt;</span> home_score, <span class="dv">3</span>, </span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(away_score <span class="sc">==</span> home_score, <span class="dv">1</span>, <span class="dv">0</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">type_convert</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-── Column specification ────────────────────────────────────────────────────────
-cols(
-  date = col_date(format = ""),
-  home = col_character(),
-  home_xg = col_double(),
-  home_score = col_double(),
-  away_score = col_double(),
-  away_xg = col_double(),
-  away = col_character()
-)</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>home_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>away_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data)){</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  home_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>home_xg[i])</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  away_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>away_xg[i])</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  home_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(home_sim <span class="sc">&gt;</span> away_sim) <span class="sc">+</span> <span class="fu">sum</span>(home_sim <span class="sc">==</span> away_sim))<span class="sc">/</span>n</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  away_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(away_sim <span class="sc">&gt;</span> home_sim) <span class="sc">+</span> <span class="fu">sum</span>(away_sim <span class="sc">==</span> home_sim))<span class="sc">/</span>n</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, home_xpts, away_xpts)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>xpts_table <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"home"</span>, <span class="st">"away"</span>), <span class="at">values_to =</span> <span class="st">"team"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_pts, away_pts),</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xpts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xpts, away_xpts), </span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_for"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xg, away_xg), </span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_ag"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_xg, home_xg), </span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>         <span class="st">"scored"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_score, away_score), </span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>         <span class="st">"against"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_score, home_score)) <span class="sc">|&gt;</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"date"</span>, <span class="st">"team"</span>, <span class="st">"gf"</span> <span class="ot">=</span> <span class="st">"scored"</span>, <span class="st">"ga"</span> <span class="ot">=</span> <span class="st">"against"</span>, <span class="st">"pts"</span>, <span class="st">"xg_for"</span>, </span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">"xg_ag"</span>, <span class="st">"xpts"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team) <span class="sc">|&gt;</span> </span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">gp =</span> <span class="fu">n</span>(), <span class="fu">across</span>(gf<span class="sc">:</span>xpts, \(x) <span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">3</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(xpts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">type_convert</span>()</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>home_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>away_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data)){</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  home_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>home_xg[i])</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  away_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>away_xg[i])</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  home_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(home_sim <span class="sc">&gt;</span> away_sim) <span class="sc">+</span> <span class="fu">sum</span>(home_sim <span class="sc">==</span> away_sim))<span class="sc">/</span>n</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  away_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(away_sim <span class="sc">&gt;</span> home_sim) <span class="sc">+</span> <span class="fu">sum</span>(away_sim <span class="sc">==</span> home_sim))<span class="sc">/</span>n</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># combine table of results with simulated results</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, home_xpts, away_xpts) </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>xpts_table <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"home"</span>, <span class="st">"away"</span>), <span class="at">values_to =</span> <span class="st">"team"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_pts, away_pts),</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xpts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xpts, away_xpts), </span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_for"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xg, away_xg), </span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_ag"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_xg, home_xg), </span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>         <span class="st">"scored"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_score, away_score), </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>         <span class="st">"against"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_score, home_score), </span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>         <span class="st">"pts_over_exp"</span> <span class="ot">=</span> pts <span class="sc">-</span> xpts) <span class="sc">|&gt;</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team, <span class="st">"gf"</span> <span class="ot">=</span> scored, <span class="st">"ga"</span> <span class="ot">=</span> against, pts, xg_for, </span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>           xg_ag, xpts, pts_over_exp) <span class="sc">|&gt;</span> </span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team) <span class="sc">|&gt;</span> </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">gp =</span> <span class="fu">n</span>(), <span class="fu">across</span>(gf<span class="sc">:</span>xpts, \(x) <span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">3</span>)), </span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">pts_over_exp =</span> <span class="fu">round</span>(<span class="fu">sum</span>(pts_over_exp), <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(xpts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="results" class="level1">
 <h1>Results</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gt</span>(xpts_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use reactable to allow for interactive sorting</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">reactable</span>(xpts_table, <span class="at">pagination =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="vlrvzbhghm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vlrvzbhghm table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#vlrvzbhghm thead, #vlrvzbhghm tbody, #vlrvzbhghm tfoot, #vlrvzbhghm tr, #vlrvzbhghm td, #vlrvzbhghm th {
-  border-style: none;
-}
-
-#vlrvzbhghm p {
-  margin: 0;
-  padding: 0;
-}
-
-#vlrvzbhghm .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#vlrvzbhghm .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#vlrvzbhghm .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#vlrvzbhghm .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#vlrvzbhghm .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#vlrvzbhghm .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#vlrvzbhghm .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#vlrvzbhghm .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#vlrvzbhghm .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#vlrvzbhghm .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#vlrvzbhghm .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#vlrvzbhghm .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#vlrvzbhghm .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#vlrvzbhghm .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#vlrvzbhghm .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vlrvzbhghm .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#vlrvzbhghm .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#vlrvzbhghm .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#vlrvzbhghm .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vlrvzbhghm .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#vlrvzbhghm .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vlrvzbhghm .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#vlrvzbhghm .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vlrvzbhghm .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#vlrvzbhghm .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vlrvzbhghm .gt_left {
-  text-align: left;
-}
-
-#vlrvzbhghm .gt_center {
-  text-align: center;
-}
-
-#vlrvzbhghm .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#vlrvzbhghm .gt_font_normal {
-  font-weight: normal;
-}
-
-#vlrvzbhghm .gt_font_bold {
-  font-weight: bold;
-}
-
-#vlrvzbhghm .gt_font_italic {
-  font-style: italic;
-}
-
-#vlrvzbhghm .gt_super {
-  font-size: 65%;
-}
-
-#vlrvzbhghm .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#vlrvzbhghm .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#vlrvzbhghm .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#vlrvzbhghm .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#vlrvzbhghm .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#vlrvzbhghm .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#vlrvzbhghm .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#vlrvzbhghm .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#vlrvzbhghm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="header gt_col_headings">
-<th id="team" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">team</th>
-<th id="gp" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">gp</th>
-<th id="gf" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">gf</th>
-<th id="ga" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">ga</th>
-<th id="pts" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">pts</th>
-<th id="xg_for" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">xg_for</th>
-<th id="xg_ag" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">xg_ag</th>
-<th id="xpts" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">xpts</th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Nashville SC</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.762</td>
-<td class="gt_row gt_right" headers="ga">1.095</td>
-<td class="gt_row gt_right" headers="pts">1.952</td>
-<td class="gt_row gt_right" headers="xg_for">1.810</td>
-<td class="gt_row gt_right" headers="xg_ag">1.138</td>
-<td class="gt_row gt_right" headers="xpts">1.728</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Philadelphia Union</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.667</td>
-<td class="gt_row gt_right" headers="ga">1.000</td>
-<td class="gt_row gt_right" headers="pts">1.905</td>
-<td class="gt_row gt_right" headers="xg_for">1.586</td>
-<td class="gt_row gt_right" headers="xg_ag">1.100</td>
-<td class="gt_row gt_right" headers="xpts">1.713</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">San Diego FC</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">2.095</td>
-<td class="gt_row gt_right" headers="ga">1.381</td>
-<td class="gt_row gt_right" headers="pts">1.857</td>
-<td class="gt_row gt_right" headers="xg_for">1.738</td>
-<td class="gt_row gt_right" headers="xg_ag">1.343</td>
-<td class="gt_row gt_right" headers="xpts">1.706</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">LAFC</td>
-<td class="gt_row gt_right" headers="gp">17</td>
-<td class="gt_row gt_right" headers="gf">1.765</td>
-<td class="gt_row gt_right" headers="ga">1.412</td>
-<td class="gt_row gt_right" headers="pts">1.529</td>
-<td class="gt_row gt_right" headers="xg_for">1.647</td>
-<td class="gt_row gt_right" headers="xg_ag">1.118</td>
-<td class="gt_row gt_right" headers="xpts">1.701</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Vancouver W'caps</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.750</td>
-<td class="gt_row gt_right" headers="ga">1.100</td>
-<td class="gt_row gt_right" headers="pts">1.900</td>
-<td class="gt_row gt_right" headers="xg_for">1.600</td>
-<td class="gt_row gt_right" headers="xg_ag">1.020</td>
-<td class="gt_row gt_right" headers="xpts">1.662</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Orlando City</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.857</td>
-<td class="gt_row gt_right" headers="ga">1.333</td>
-<td class="gt_row gt_right" headers="pts">1.619</td>
-<td class="gt_row gt_right" headers="xg_for">1.733</td>
-<td class="gt_row gt_right" headers="xg_ag">1.290</td>
-<td class="gt_row gt_right" headers="xpts">1.650</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Columbus Crew</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.619</td>
-<td class="gt_row gt_right" headers="ga">1.286</td>
-<td class="gt_row gt_right" headers="pts">1.810</td>
-<td class="gt_row gt_right" headers="xg_for">1.671</td>
-<td class="gt_row gt_right" headers="xg_ag">1.371</td>
-<td class="gt_row gt_right" headers="xpts">1.570</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">SJ Earthquakes</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.952</td>
-<td class="gt_row gt_right" headers="ga">1.571</td>
-<td class="gt_row gt_right" headers="pts">1.333</td>
-<td class="gt_row gt_right" headers="xg_for">1.967</td>
-<td class="gt_row gt_right" headers="xg_ag">1.657</td>
-<td class="gt_row gt_right" headers="xpts">1.570</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Inter Miami</td>
-<td class="gt_row gt_right" headers="gp">17</td>
-<td class="gt_row gt_right" headers="gf">2.353</td>
-<td class="gt_row gt_right" headers="ga">1.647</td>
-<td class="gt_row gt_right" headers="pts">1.882</td>
-<td class="gt_row gt_right" headers="xg_for">1.788</td>
-<td class="gt_row gt_right" headers="xg_ag">1.535</td>
-<td class="gt_row gt_right" headers="xpts">1.557</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Seattle Sounders</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.400</td>
-<td class="gt_row gt_right" headers="ga">1.300</td>
-<td class="gt_row gt_right" headers="pts">1.500</td>
-<td class="gt_row gt_right" headers="xg_for">1.450</td>
-<td class="gt_row gt_right" headers="xg_ag">1.140</td>
-<td class="gt_row gt_right" headers="xpts">1.556</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Minnesota Utd</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.667</td>
-<td class="gt_row gt_right" headers="ga">1.143</td>
-<td class="gt_row gt_right" headers="pts">1.762</td>
-<td class="gt_row gt_right" headers="xg_for">1.433</td>
-<td class="gt_row gt_right" headers="xg_ag">1.148</td>
-<td class="gt_row gt_right" headers="xpts">1.532</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">NYCFC</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.350</td>
-<td class="gt_row gt_right" headers="ga">1.100</td>
-<td class="gt_row gt_right" headers="pts">1.550</td>
-<td class="gt_row gt_right" headers="xg_for">1.495</td>
-<td class="gt_row gt_right" headers="xg_ag">1.235</td>
-<td class="gt_row gt_right" headers="xpts">1.497</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Austin</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">0.750</td>
-<td class="gt_row gt_right" headers="ga">1.150</td>
-<td class="gt_row gt_right" headers="pts">1.300</td>
-<td class="gt_row gt_right" headers="xg_for">1.250</td>
-<td class="gt_row gt_right" headers="xg_ag">1.265</td>
-<td class="gt_row gt_right" headers="xpts">1.415</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Chicago Fire</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.950</td>
-<td class="gt_row gt_right" headers="ga">1.800</td>
-<td class="gt_row gt_right" headers="pts">1.400</td>
-<td class="gt_row gt_right" headers="xg_for">1.635</td>
-<td class="gt_row gt_right" headers="xg_ag">1.725</td>
-<td class="gt_row gt_right" headers="xpts">1.411</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Charlotte</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.619</td>
-<td class="gt_row gt_right" headers="ga">1.714</td>
-<td class="gt_row gt_right" headers="pts">1.238</td>
-<td class="gt_row gt_right" headers="xg_for">1.567</td>
-<td class="gt_row gt_right" headers="xg_ag">1.595</td>
-<td class="gt_row gt_right" headers="xpts">1.392</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">NY Red Bulls</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.571</td>
-<td class="gt_row gt_right" headers="ga">1.190</td>
-<td class="gt_row gt_right" headers="pts">1.429</td>
-<td class="gt_row gt_right" headers="xg_for">1.367</td>
-<td class="gt_row gt_right" headers="xg_ag">1.338</td>
-<td class="gt_row gt_right" headers="xpts">1.368</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Houston Dynamo</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.381</td>
-<td class="gt_row gt_right" headers="ga">1.619</td>
-<td class="gt_row gt_right" headers="pts">1.238</td>
-<td class="gt_row gt_right" headers="xg_for">1.252</td>
-<td class="gt_row gt_right" headers="xg_ag">1.319</td>
-<td class="gt_row gt_right" headers="xpts">1.322</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">FC Cincinnati</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.571</td>
-<td class="gt_row gt_right" headers="ga">1.286</td>
-<td class="gt_row gt_right" headers="pts">2.000</td>
-<td class="gt_row gt_right" headers="xg_for">1.281</td>
-<td class="gt_row gt_right" headers="xg_ag">1.505</td>
-<td class="gt_row gt_right" headers="xpts">1.304</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Atlanta Utd</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.100</td>
-<td class="gt_row gt_right" headers="ga">1.850</td>
-<td class="gt_row gt_right" headers="pts">0.900</td>
-<td class="gt_row gt_right" headers="xg_for">1.350</td>
-<td class="gt_row gt_right" headers="xg_ag">1.545</td>
-<td class="gt_row gt_right" headers="xpts">1.281</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Colorado Rapids</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.143</td>
-<td class="gt_row gt_right" headers="ga">1.429</td>
-<td class="gt_row gt_right" headers="pts">1.238</td>
-<td class="gt_row gt_right" headers="xg_for">1.443</td>
-<td class="gt_row gt_right" headers="xg_ag">1.557</td>
-<td class="gt_row gt_right" headers="xpts">1.275</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">FC Dallas</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.350</td>
-<td class="gt_row gt_right" headers="ga">1.850</td>
-<td class="gt_row gt_right" headers="pts">1.050</td>
-<td class="gt_row gt_right" headers="xg_for">1.385</td>
-<td class="gt_row gt_right" headers="xg_ag">1.540</td>
-<td class="gt_row gt_right" headers="xpts">1.271</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">St. Louis</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.000</td>
-<td class="gt_row gt_right" headers="ga">1.619</td>
-<td class="gt_row gt_right" headers="pts">0.714</td>
-<td class="gt_row gt_right" headers="xg_for">1.324</td>
-<td class="gt_row gt_right" headers="xg_ag">1.610</td>
-<td class="gt_row gt_right" headers="xpts">1.223</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">NE Revolution</td>
-<td class="gt_row gt_right" headers="gp">19</td>
-<td class="gt_row gt_right" headers="gf">1.316</td>
-<td class="gt_row gt_right" headers="ga">1.211</td>
-<td class="gt_row gt_right" headers="pts">1.263</td>
-<td class="gt_row gt_right" headers="xg_for">1.242</td>
-<td class="gt_row gt_right" headers="xg_ag">1.442</td>
-<td class="gt_row gt_right" headers="xpts">1.193</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Real Salt Lake</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.100</td>
-<td class="gt_row gt_right" headers="ga">1.400</td>
-<td class="gt_row gt_right" headers="pts">1.100</td>
-<td class="gt_row gt_right" headers="xg_for">1.255</td>
-<td class="gt_row gt_right" headers="xg_ag">1.645</td>
-<td class="gt_row gt_right" headers="xpts">1.176</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">CF Montréal</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">0.857</td>
-<td class="gt_row gt_right" headers="ga">1.905</td>
-<td class="gt_row gt_right" headers="pts">0.667</td>
-<td class="gt_row gt_right" headers="xg_for">1.186</td>
-<td class="gt_row gt_right" headers="xg_ag">1.510</td>
-<td class="gt_row gt_right" headers="xpts">1.172</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Portland Timbers</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.500</td>
-<td class="gt_row gt_right" headers="ga">1.400</td>
-<td class="gt_row gt_right" headers="pts">1.650</td>
-<td class="gt_row gt_right" headers="xg_for">1.225</td>
-<td class="gt_row gt_right" headers="xg_ag">1.570</td>
-<td class="gt_row gt_right" headers="xpts">1.166</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">D.C. United</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">0.810</td>
-<td class="gt_row gt_right" headers="ga">1.857</td>
-<td class="gt_row gt_right" headers="pts">0.905</td>
-<td class="gt_row gt_right" headers="xg_for">1.100</td>
-<td class="gt_row gt_right" headers="xg_ag">1.467</td>
-<td class="gt_row gt_right" headers="xpts">1.136</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">LA Galaxy</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.048</td>
-<td class="gt_row gt_right" headers="ga">2.000</td>
-<td class="gt_row gt_right" headers="pts">0.571</td>
-<td class="gt_row gt_right" headers="xg_for">1.214</td>
-<td class="gt_row gt_right" headers="xg_ag">1.667</td>
-<td class="gt_row gt_right" headers="xpts">1.135</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="team">Toronto FC</td>
-<td class="gt_row gt_right" headers="gp">20</td>
-<td class="gt_row gt_right" headers="gf">1.150</td>
-<td class="gt_row gt_right" headers="ga">1.400</td>
-<td class="gt_row gt_right" headers="pts">0.850</td>
-<td class="gt_row gt_right" headers="xg_for">0.985</td>
-<td class="gt_row gt_right" headers="xg_ag">1.500</td>
-<td class="gt_row gt_right" headers="xpts">1.028</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="team">Sporting KC</td>
-<td class="gt_row gt_right" headers="gp">21</td>
-<td class="gt_row gt_right" headers="gf">1.571</td>
-<td class="gt_row gt_right" headers="ga">1.810</td>
-<td class="gt_row gt_right" headers="pts">1.095</td>
-<td class="gt_row gt_right" headers="xg_for">1.005</td>
-<td class="gt_row gt_right" headers="xg_ag">1.986</td>
-<td class="gt_row gt_right" headers="xpts">0.828</td>
-</tr>
-</tbody>
-</table>
-
-</div>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-6fc8dd2c4a338f0c3253" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-6fc8dd2c4a338f0c3253">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"team":["Nashville SC","San Diego FC","LAFC","Philadelphia Union","Vancouver W'caps","Orlando City","Columbus Crew","Seattle Sounders","Inter Miami","SJ Earthquakes","Minnesota Utd","NYCFC","Austin","Chicago Fire","Charlotte","NY Red Bulls","Houston Dynamo","FC Cincinnati","Colorado Rapids","FC Dallas","Atlanta Utd","St. Louis","NE Revolution","Real Salt Lake","D.C. United","CF Montréal","Portland Timbers","LA Galaxy","Toronto FC","Sporting KC"],"gp":[21,21,17,21,20,21,21,20,17,21,21,20,20,20,21,21,21,21,21,20,20,21,19,20,21,21,20,21,20,21],"gf":[1.762,2.095,1.765,1.667,1.75,1.857,1.619,1.4,2.353,1.952,1.667,1.35,0.75,1.95,1.619,1.571,1.381,1.571,1.143,1.35,1.1,1,1.316,1.1,0.81,0.857,1.5,1.048,1.15,1.571],"ga":[1.095,1.381,1.412,1,1.1,1.333,1.286,1.3,1.647,1.571,1.143,1.1,1.15,1.8,1.714,1.19,1.619,1.286,1.429,1.85,1.85,1.619,1.211,1.4,1.857,1.905,1.4,2,1.4,1.81],"pts":[1.952,1.857,1.529,1.905,1.9,1.619,1.81,1.5,1.882,1.333,1.762,1.55,1.3,1.4,1.238,1.429,1.238,2,1.238,1.05,0.9,0.714,1.263,1.1,0.905,0.667,1.65,0.571,0.85,1.095],"xg_for":[1.81,1.738,1.647,1.586,1.6,1.733,1.671,1.45,1.788,1.967,1.433,1.495,1.25,1.635,1.567,1.367,1.252,1.281,1.443,1.385,1.35,1.324,1.242,1.255,1.1,1.186,1.225,1.214,0.985,1.005],"xg_ag":[1.138,1.343,1.118,1.1,1.02,1.29,1.371,1.14,1.535,1.657,1.148,1.235,1.265,1.725,1.595,1.338,1.319,1.505,1.557,1.54,1.545,1.61,1.442,1.645,1.467,1.51,1.57,1.667,1.5,1.986],"xpts":[1.734,1.72,1.699,1.699,1.669,1.649,1.581,1.567,1.559,1.549,1.544,1.501,1.423,1.408,1.381,1.361,1.316,1.297,1.27,1.26,1.259,1.215,1.199,1.184,1.164,1.162,1.155,1.143,1.023,0.842],"pts_over_exp":[4.578,2.875,-2.89,4.312,4.616,-0.636,4.805,-1.346,5.496,-4.532,4.573,0.989,-2.452,-0.168,-3.004,1.424,-1.644,14.771,-0.677,-4.197,-7.183,-10.518,1.227,-1.678,-5.449,-10.403,9.897,-12.005,-3.461,5.32]},"columns":[{"id":"team","name":"team","type":"character"},{"id":"gp","name":"gp","type":"numeric"},{"id":"gf","name":"gf","type":"numeric"},{"id":"ga","name":"ga","type":"numeric"},{"id":"pts","name":"pts","type":"numeric"},{"id":"xg_for","name":"xg_for","type":"numeric"},{"id":"xg_ag","name":"xg_ag","type":"numeric"},{"id":"xpts","name":"xpts","type":"numeric"},{"id":"pts_over_exp","name":"pts_over_exp","type":"numeric"}],"pagination":false,"dataKey":"174394f4bec4ea98470b6b2f3d44eb81"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>

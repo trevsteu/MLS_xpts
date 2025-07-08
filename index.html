@@ -231,8 +231,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>vwfc_matches <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span> <span class="sc">|</span> away <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">opponent =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, <span class="fu">str_c</span>(<span class="st">"@ "</span>, away), </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">str_c</span>(<span class="st">"vs "</span>, home)), </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">opponent =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, <span class="fu">str_c</span>(<span class="st">"vs "</span>, away), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">str_c</span>(<span class="st">"@ "</span>, home)), </span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_gf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_score, away_score),</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_ga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_score, home_score),</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xgf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xg, away_xg),</span>
@@ -709,7 +709,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-02-23</td>
-<td class="gt_row gt_left" headers="opponent">vs Portland Timbers</td>
+<td class="gt_row gt_left" headers="opponent">@ Portland Timbers</td>
 <td class="gt_row gt_left" headers="result">4-1 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">3.0</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
@@ -717,7 +717,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-03-02</td>
-<td class="gt_row gt_left" headers="opponent">@ LA Galaxy</td>
+<td class="gt_row gt_left" headers="opponent">vs LA Galaxy</td>
 <td class="gt_row gt_left" headers="result">2-1 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.9</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.6</td>
@@ -725,7 +725,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-03-08</td>
-<td class="gt_row gt_left" headers="opponent">@ CF Montréal</td>
+<td class="gt_row gt_left" headers="opponent">vs CF Montréal</td>
 <td class="gt_row gt_left" headers="result">2-0 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.6</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.3</td>
@@ -733,7 +733,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-03-15</td>
-<td class="gt_row gt_left" headers="opponent">vs FC Dallas</td>
+<td class="gt_row gt_left" headers="opponent">@ FC Dallas</td>
 <td class="gt_row gt_left" headers="result">1-0 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.8</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.2</td>
@@ -741,7 +741,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-03-22</td>
-<td class="gt_row gt_left" headers="opponent">@ Chicago Fire</td>
+<td class="gt_row gt_left" headers="opponent">vs Chicago Fire</td>
 <td class="gt_row gt_left" headers="result">1-3 L</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.2</td>
 <td class="gt_row gt_right" headers="vwfc_xga">2.2</td>
@@ -749,7 +749,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-03-29</td>
-<td class="gt_row gt_left" headers="opponent">vs Toronto FC</td>
+<td class="gt_row gt_left" headers="opponent">@ Toronto FC</td>
 <td class="gt_row gt_left" headers="result">0-0 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.3</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
@@ -757,7 +757,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-04-05</td>
-<td class="gt_row gt_left" headers="opponent">@ Colorado Rapids</td>
+<td class="gt_row gt_left" headers="opponent">vs Colorado Rapids</td>
 <td class="gt_row gt_left" headers="result">2-0 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">2.0</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.3</td>
@@ -765,7 +765,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-04-12</td>
-<td class="gt_row gt_left" headers="opponent">@ Austin</td>
+<td class="gt_row gt_left" headers="opponent">vs Austin</td>
 <td class="gt_row gt_left" headers="result">5-1 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">4.5</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
@@ -773,7 +773,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-04-19</td>
-<td class="gt_row gt_left" headers="opponent">vs St. Louis</td>
+<td class="gt_row gt_left" headers="opponent">@ St. Louis</td>
 <td class="gt_row gt_left" headers="result">0-0 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.1</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.0</td>
@@ -781,7 +781,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-04-27</td>
-<td class="gt_row gt_left" headers="opponent">vs Minnesota Utd</td>
+<td class="gt_row gt_left" headers="opponent">@ Minnesota Utd</td>
 <td class="gt_row gt_left" headers="result">3-1 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.2</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.1</td>
@@ -789,7 +789,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-05-03</td>
-<td class="gt_row gt_left" headers="opponent">@ Real Salt Lake</td>
+<td class="gt_row gt_left" headers="opponent">vs Real Salt Lake</td>
 <td class="gt_row gt_left" headers="result">2-1 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">2.9</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.6</td>
@@ -797,7 +797,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-05-11</td>
-<td class="gt_row gt_left" headers="opponent">@ LAFC</td>
+<td class="gt_row gt_left" headers="opponent">vs LAFC</td>
 <td class="gt_row gt_left" headers="result">2-2 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.8</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.8</td>
@@ -805,7 +805,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-05-17</td>
-<td class="gt_row gt_left" headers="opponent">vs Austin</td>
+<td class="gt_row gt_left" headers="opponent">@ Austin</td>
 <td class="gt_row gt_left" headers="result">0-0 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.4</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.4</td>
@@ -813,7 +813,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-05-24</td>
-<td class="gt_row gt_left" headers="opponent">vs Real Salt Lake</td>
+<td class="gt_row gt_left" headers="opponent">@ Real Salt Lake</td>
 <td class="gt_row gt_left" headers="result">3-2 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">3.0</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.0</td>
@@ -821,7 +821,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-05-28</td>
-<td class="gt_row gt_left" headers="opponent">@ Minnesota Utd</td>
+<td class="gt_row gt_left" headers="opponent">vs Minnesota Utd</td>
 <td class="gt_row gt_left" headers="result">0-0 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.4</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.2</td>
@@ -829,7 +829,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-06-08</td>
-<td class="gt_row gt_left" headers="opponent">@ Seattle Sounders</td>
+<td class="gt_row gt_left" headers="opponent">vs Seattle Sounders</td>
 <td class="gt_row gt_left" headers="result">3-0 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.9</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.6</td>
@@ -837,7 +837,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-06-14</td>
-<td class="gt_row gt_left" headers="opponent">vs Columbus Crew</td>
+<td class="gt_row gt_left" headers="opponent">@ Columbus Crew</td>
 <td class="gt_row gt_left" headers="result">1-2 L</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.7</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.2</td>
@@ -845,7 +845,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-06-25</td>
-<td class="gt_row gt_left" headers="opponent">@ San Diego FC</td>
+<td class="gt_row gt_left" headers="opponent">vs San Diego FC</td>
 <td class="gt_row gt_left" headers="result">3-5 L</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.1</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.5</td>
@@ -853,7 +853,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-06-29</td>
-<td class="gt_row gt_left" headers="opponent">vs LAFC</td>
+<td class="gt_row gt_left" headers="opponent">@ LAFC</td>
 <td class="gt_row gt_left" headers="result">1-0 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.7</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.9</td>
@@ -861,7 +861,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-07-04</td>
-<td class="gt_row gt_left" headers="opponent">vs LA Galaxy</td>
+<td class="gt_row gt_left" headers="opponent">@ LA Galaxy</td>
 <td class="gt_row gt_left" headers="result">0-3 L</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.5</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.4</td>

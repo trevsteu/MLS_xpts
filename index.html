@@ -237,7 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_ga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_score, home_score),</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xgf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xg, away_xg),</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_xg, home_xg),</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xpts =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xpts, home_xpts),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xpts =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xpts, away_xpts),</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">res =</span> <span class="fu">ifelse</span>(vwfc_gf <span class="sc">&gt;</span> vwfc_ga, <span class="st">"W"</span>, </span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">ifelse</span>(vwfc_gf <span class="sc">==</span> vwfc_ga, <span class="st">"D"</span>, <span class="st">"L"</span>)), </span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">result =</span> <span class="fu">str_c</span>(vwfc_gf, <span class="st">"-"</span>, vwfc_ga, <span class="st">" "</span>, res))<span class="sc">|&gt;</span> </span>
@@ -713,7 +713,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">4-1 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">3.0</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.307</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">2.593</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-03-02</td>
@@ -737,7 +737,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">1-0 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.8</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.2</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.735</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">1.815</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-03-22</td>
@@ -753,7 +753,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">0-0 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.3</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.824</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">1.877</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-04-05</td>
@@ -777,7 +777,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">0-0 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.1</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.0</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.300</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">1.393</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-04-27</td>
@@ -785,7 +785,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">3-1 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">1.2</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.1</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.244</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">1.472</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-05-03</td>
@@ -809,7 +809,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">0-0 D</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.4</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.4</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.139</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">0.585</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-05-24</td>
@@ -817,7 +817,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">3-2 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">3.0</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.0</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.450</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">2.415</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_right" headers="date">2025-05-28</td>
@@ -841,7 +841,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">1-2 L</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.7</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.2</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.769</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">0.917</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-06-25</td>
@@ -857,7 +857,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">1-0 W</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.7</td>
 <td class="gt_row gt_right" headers="vwfc_xga">0.9</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.520</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">1.139</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_right" headers="date">2025-07-04</td>
@@ -865,7 +865,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="result">0-3 L</td>
 <td class="gt_row gt_right" headers="vwfc_xgf">0.5</td>
 <td class="gt_row gt_right" headers="vwfc_xga">1.4</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.145</td>
+<td class="gt_row gt_right" headers="vwfc_xpts">0.597</td>
 </tr>
 </tbody>
 </table>

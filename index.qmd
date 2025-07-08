@@ -1,11 +1,13 @@
 ---
-title: "table_maker"
+title: "MLS Expected Points"
 author: Trevor S.
 format: html
 editor: visual
 ---
 
 # Motivation:
+
+![](images/clipboard-1227717430.png)
 
 I will write later)
 

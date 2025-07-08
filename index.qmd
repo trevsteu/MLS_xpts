@@ -9,9 +9,9 @@ editor: visual
 
 I will write later)
 
-# Setup: 
+# Setup:
 
-```{r, warning = FALSE}
+```{r, results = "hide", message=FALSE, warning=FALSE}
 library(tidyr)
 library(tidyverse)
 library(gt)
@@ -67,7 +67,7 @@ xpts_table <- data |>
   arrange(desc(xpts))
 ```
 
-# Results 
+# Results
 
 ```{r}
 gt(xpts_table)

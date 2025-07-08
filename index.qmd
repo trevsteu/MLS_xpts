@@ -25,22 +25,31 @@ library(reactable)
 ```{r, warning = FALSE, message=FALSE}
 url <- str_glue("https://fbref.com/en/comps/22/schedule/Major-League-Soccer-Scores-and-Fixtures")
 
-n <- 1000 # number of times to simulate each game
+n <- 1000 # number of times to simulate each match
+set.seed(2025) # for reproducibility
+
 
 html <- read_html(url)
-data <- html |> 
+html_table <- html |> 
   html_element("table") |> 
-  html_table() |> 
+  html_table() 
+
+head(html_table)
+
+data <- html_table |> 
   janitor::clean_names() |> 
   filter(date != "Date" & score != "") |> 
   separate_wider_regex(score, patterns = c(home_score = "[0-9]+", "–", 
-                                           away_score = "[0-9]+")) |>
-    select("date", "home", "home_xg" = "x_g", "home_score", "away_score", "away_xg" = "x_g_2", "away") |> 
+                                    away_score = "[0-9]+")) |>
+    select("date", "home", "home_xg" = "x_g", "home_score", 
+           "away_score", "away_xg" = "x_g_2", "away") |> 
   mutate("home_pts" = ifelse(home_score > away_score, 3, 
                              ifelse(home_score == away_score, 1, 0)), 
          "away_pts" = ifelse(away_score > home_score, 3, 
                              ifelse(away_score == home_score, 1, 0))) |>
   type_convert()
+
+head(data)
 
 home_xpts <- rep(NA, times = nrow(data))
 away_xpts <- rep(NA, times = nrow(data))
@@ -71,9 +80,27 @@ xpts_table <- data |>
   arrange(desc(xpts))
 ```
 
-# Results
+# Expected Points Table
 
 ```{r}
 # use reactable to allow for interactive sorting
 reactable(xpts_table, pagination = FALSE)
+```
+
+# Whitecaps Matches
+
+```{r}
+data |> 
+  filter(home == "Vancouver W'caps" | away == "Vancouver W'caps") |> 
+  mutate(opponent = ifelse(home == "Vancouver W'caps", str_c("@ ", away), 
+                           str_c("vs ", home)), 
+         vwfc_gf = ifelse(home == "Vancouver W'caps", home_score, away_score),
+         vwfc_ga = ifelse(home == "Vancouver W'caps", away_score, home_score),
+         vwfc_xgf = ifelse(home == "Vancouver W'caps", home_xg, away_xg),
+         vwfc_xga = ifelse(home == "Vancouver W'caps", away_xg, home_xg),
+         vwfc_xpts = ifelse(home == "Vancouver W'caps", home_xpts, home_xpts),
+         res = ifelse(vwfc_gf > vwfc_ga, "W", 
+                      ifelse(vwfc_gf == vwfc_ga, "D", "L")), 
+         result = str_c(vwfc_gf, "-", vwfc_ga, " ", res))|> 
+  select(date, opponent, result, vwfc_xgf, vwfc_xga, vwfc_xpts)
 ```

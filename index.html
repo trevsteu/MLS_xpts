@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="motivation" class="level1">
 <h1>Motivation:</h1>
-<p>(I will write later)</p>
+<p>Note that his project is a work in progress. I will update as I have the time.</p>
 </section>
 <section id="setup" class="level1">
 <h1>Setup:</h1>
@@ -139,60 +139,131 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">str_glue</span>(<span class="st">"https://fbref.com/en/comps/22/schedule/Major-League-Soccer-Scores-and-Fixtures"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># number of times to simulate each game</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span> </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"table"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">!=</span> <span class="st">"Date"</span> <span class="sc">&amp;</span> score <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_regex</span>(score, <span class="at">patterns =</span> <span class="fu">c</span>(<span class="at">home_score =</span> <span class="st">"[0-9]+"</span>, <span class="st">"–"</span>, </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">away_score =</span> <span class="st">"[0-9]+"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="st">"date"</span>, <span class="st">"home"</span>, <span class="st">"home_xg"</span> <span class="ot">=</span> <span class="st">"x_g"</span>, <span class="st">"home_score"</span>, <span class="st">"away_score"</span>, <span class="st">"away_xg"</span> <span class="ot">=</span> <span class="st">"x_g_2"</span>, <span class="st">"away"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"home_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(home_score <span class="sc">&gt;</span> away_score, <span class="dv">3</span>, </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(home_score <span class="sc">==</span> away_score, <span class="dv">1</span>, <span class="dv">0</span>)), </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>         <span class="st">"away_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(away_score <span class="sc">&gt;</span> home_score, <span class="dv">3</span>, </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(away_score <span class="sc">==</span> home_score, <span class="dv">1</span>, <span class="dv">0</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">type_convert</span>()</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>home_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>away_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data)){</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  home_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>home_xg[i])</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  away_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>away_xg[i])</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  home_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(home_sim <span class="sc">&gt;</span> away_sim) <span class="sc">+</span> <span class="fu">sum</span>(home_sim <span class="sc">==</span> away_sim))<span class="sc">/</span>n</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  away_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(away_sim <span class="sc">&gt;</span> home_sim) <span class="sc">+</span> <span class="fu">sum</span>(away_sim <span class="sc">==</span> home_sim))<span class="sc">/</span>n</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># combine table of results with simulated results</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, home_xpts, away_xpts) </span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>xpts_table <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"home"</span>, <span class="st">"away"</span>), <span class="at">values_to =</span> <span class="st">"team"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_pts, away_pts),</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xpts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xpts, away_xpts), </span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_for"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xg, away_xg), </span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_ag"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_xg, home_xg), </span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>         <span class="st">"scored"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_score, away_score), </span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>         <span class="st">"against"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_score, home_score), </span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>         <span class="st">"pts_over_exp"</span> <span class="ot">=</span> pts <span class="sc">-</span> xpts) <span class="sc">|&gt;</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team, <span class="st">"gf"</span> <span class="ot">=</span> scored, <span class="st">"ga"</span> <span class="ot">=</span> against, pts, xg_for, </span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>           xg_ag, xpts, pts_over_exp) <span class="sc">|&gt;</span> </span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team) <span class="sc">|&gt;</span> </span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">gp =</span> <span class="fu">n</span>(), <span class="fu">across</span>(gf<span class="sc">:</span>xpts, \(x) <span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">3</span>)), </span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">pts_over_exp =</span> <span class="fu">round</span>(<span class="fu">sum</span>(pts_over_exp), <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(xpts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># number of times to simulate each match</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>) <span class="co"># for reproducibility</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>html_table <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"table"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>() </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(html_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 13
+  Day   Date       Time  Home   xG    Score xG    Away  Attendance Venue Referee
+  &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  
+1 Sat   2025-02-22 13:45 LAFC   1.3   1–0   0.6   Minn… 22,310     BMO … Guido …
+2 Sun   2025-02-23 13:00 Portl… 0.7   1–4   3.0   Vanc… 20,079     Prov… Victor…
+3 Sat   2025-02-22 19:30 Orlan… 2.4   2–4   1.8   Phil… 22,689     Inte… Rubiel…
+4 Sat   2025-02-22 19:30 FC Ci… 1.8   1–0   1.1   NY R… 22,747     TQL … Lukasz…
+5 Sat   2025-02-22 19:30 Nashv… 0.9   0–0   0.5   NE R… 23,494     Geod… Marcos…
+6 Sat   2025-02-22 19:30 Inter… 2.5   2–2   1.0   NYCFC 20,868     Chas… Alexis…
+# ℹ 2 more variables: `Match Report` &lt;chr&gt;, Notes &lt;chr&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> html_table <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">!=</span> <span class="st">"Date"</span> <span class="sc">&amp;</span> score <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_regex</span>(score, <span class="at">patterns =</span> <span class="fu">c</span>(<span class="at">home_score =</span> <span class="st">"[0-9]+"</span>, <span class="st">"–"</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">away_score =</span> <span class="st">"[0-9]+"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="st">"date"</span>, <span class="st">"home"</span>, <span class="st">"home_xg"</span> <span class="ot">=</span> <span class="st">"x_g"</span>, <span class="st">"home_score"</span>, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"away_score"</span>, <span class="st">"away_xg"</span> <span class="ot">=</span> <span class="st">"x_g_2"</span>, <span class="st">"away"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"home_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(home_score <span class="sc">&gt;</span> away_score, <span class="dv">3</span>, </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(home_score <span class="sc">==</span> away_score, <span class="dv">1</span>, <span class="dv">0</span>)), </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">"away_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(away_score <span class="sc">&gt;</span> home_score, <span class="dv">3</span>, </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(away_score <span class="sc">==</span> home_score, <span class="dv">1</span>, <span class="dv">0</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">type_convert</span>()</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+  date       home  home_xg home_score away_score away_xg away  home_pts away_pts
+  &lt;date&gt;     &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 2025-02-22 LAFC      1.3          1          0     0.6 Minn…        3        0
+2 2025-02-23 Port…     0.7          1          4     3   Vanc…        0        3
+3 2025-02-22 Orla…     2.4          2          4     1.8 Phil…        0        3
+4 2025-02-22 FC C…     1.8          1          0     1.1 NY R…        3        0
+5 2025-02-22 Nash…     0.9          0          0     0.5 NE R…        1        1
+6 2025-02-22 Inte…     2.5          2          2     1   NYCFC        1        1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>home_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>away_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data)){</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  home_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>home_xg[i])</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  away_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, data<span class="sc">$</span>away_xg[i])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  home_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(home_sim <span class="sc">&gt;</span> away_sim) <span class="sc">+</span> <span class="fu">sum</span>(home_sim <span class="sc">==</span> away_sim))<span class="sc">/</span>n</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  away_xpts[i] <span class="ot">&lt;-</span> (<span class="dv">3</span> <span class="sc">*</span> <span class="fu">sum</span>(away_sim <span class="sc">&gt;</span> home_sim) <span class="sc">+</span> <span class="fu">sum</span>(away_sim <span class="sc">==</span> home_sim))<span class="sc">/</span>n</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># combine table of results with simulated results</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, home_xpts, away_xpts) </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>xpts_table <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"home"</span>, <span class="st">"away"</span>), <span class="at">values_to =</span> <span class="st">"team"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_pts, away_pts),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xpts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xpts, away_xpts), </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_for"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_xg, away_xg), </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xg_ag"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_xg, home_xg), </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>         <span class="st">"scored"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_score, away_score), </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>         <span class="st">"against"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_score, home_score), </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>         <span class="st">"pts_over_exp"</span> <span class="ot">=</span> pts <span class="sc">-</span> xpts) <span class="sc">|&gt;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team, <span class="st">"gf"</span> <span class="ot">=</span> scored, <span class="st">"ga"</span> <span class="ot">=</span> against, pts, xg_for, </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>           xg_ag, xpts, pts_over_exp) <span class="sc">|&gt;</span> </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team) <span class="sc">|&gt;</span> </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">gp =</span> <span class="fu">n</span>(), <span class="fu">across</span>(gf<span class="sc">:</span>xpts, \(x) <span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">3</span>)), </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">pts_over_exp =</span> <span class="fu">round</span>(<span class="fu">sum</span>(pts_over_exp), <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(xpts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="results" class="level1">
-<h1>Results</h1>
+<section id="expected-points-table" class="level1">
+<h1>Expected Points Table</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use reactable to allow for interactive sorting</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">reactable</span>(xpts_table, <span class="at">pagination =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use reactable to allow for interactive sorting</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">reactable</span>(xpts_table, <span class="at">pagination =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-99c3cedb02291a92b460" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-99c3cedb02291a92b460">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"team":["Nashville SC","Philadelphia Union","San Diego FC","LAFC","Vancouver W'caps","Orlando City","Columbus Crew","SJ Earthquakes","Inter Miami","Seattle Sounders","Minnesota Utd","NYCFC","Austin","Chicago Fire","Charlotte","NY Red Bulls","Houston Dynamo","FC Cincinnati","Colorado Rapids","FC Dallas","Atlanta Utd","St. Louis","Real Salt Lake","NE Revolution","CF Montréal","D.C. United","Portland Timbers","LA Galaxy","Toronto FC","Sporting KC"],"gp":[21,21,21,17,20,21,21,21,17,20,21,20,20,20,21,21,21,21,21,20,20,21,20,19,21,21,20,21,20,21],"gf":[1.762,1.667,2.095,1.765,1.75,1.857,1.619,1.952,2.353,1.4,1.667,1.35,0.75,1.95,1.619,1.571,1.381,1.571,1.143,1.35,1.1,1,1.1,1.316,0.857,0.81,1.5,1.048,1.15,1.571],"ga":[1.095,1,1.381,1.412,1.1,1.333,1.286,1.571,1.647,1.3,1.143,1.1,1.15,1.8,1.714,1.19,1.619,1.286,1.429,1.85,1.85,1.619,1.4,1.211,1.905,1.857,1.4,2,1.4,1.81],"pts":[1.952,1.905,1.857,1.529,1.9,1.619,1.81,1.333,1.882,1.5,1.762,1.55,1.3,1.4,1.238,1.429,1.238,2,1.238,1.05,0.9,0.714,1.1,1.263,0.667,0.905,1.65,0.571,0.85,1.095],"xg_for":[1.81,1.586,1.738,1.647,1.6,1.733,1.671,1.967,1.788,1.45,1.433,1.495,1.25,1.635,1.567,1.367,1.252,1.281,1.443,1.385,1.35,1.324,1.255,1.242,1.186,1.1,1.225,1.214,0.985,1.005],"xg_ag":[1.138,1.1,1.343,1.118,1.02,1.29,1.371,1.657,1.535,1.14,1.148,1.235,1.265,1.725,1.595,1.338,1.319,1.505,1.557,1.54,1.545,1.61,1.645,1.442,1.51,1.467,1.57,1.667,1.5,1.986],"xpts":[1.732,1.707,1.705,1.689,1.684,1.641,1.581,1.572,1.549,1.544,1.538,1.497,1.417,1.404,1.371,1.363,1.325,1.3,1.292,1.284,1.27,1.221,1.192,1.185,1.179,1.157,1.146,1.128,1.025,0.839],"pts_over_exp":[4.62,4.152,3.196,-2.713,4.33,-0.462,4.808,-5.02,5.671,-0.887,4.697,1.067,-2.34,-0.088,-2.782,1.372,-1.815,14.701,-1.13,-4.687,-7.391,-10.647,-1.845,1.488,-10.769,-5.301,10.074,-11.693,-3.496,5.372]},"columns":[{"id":"team","name":"team","type":"character"},{"id":"gp","name":"gp","type":"numeric"},{"id":"gf","name":"gf","type":"numeric"},{"id":"ga","name":"ga","type":"numeric"},{"id":"pts","name":"pts","type":"numeric"},{"id":"xg_for","name":"xg_for","type":"numeric"},{"id":"xg_ag","name":"xg_ag","type":"numeric"},{"id":"xpts","name":"xpts","type":"numeric"},{"id":"pts_over_exp","name":"pts_over_exp","type":"numeric"}],"pagination":false,"dataKey":"42a4f8bde7271fe9b7817749e5575285"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-381244ed9ec71dfd44a5" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-381244ed9ec71dfd44a5">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"team":["Nashville SC","San Diego FC","Philadelphia Union","LAFC","Vancouver W'caps","Orlando City","Columbus Crew","SJ Earthquakes","Seattle Sounders","Minnesota Utd","Inter Miami","NYCFC","Austin","Chicago Fire","Charlotte","NY Red Bulls","Houston Dynamo","FC Cincinnati","Atlanta Utd","FC Dallas","Colorado Rapids","St. Louis","NE Revolution","Real Salt Lake","CF Montréal","Portland Timbers","D.C. United","LA Galaxy","Toronto FC","Sporting KC"],"gp":[21,21,21,17,20,21,21,21,20,21,17,20,20,20,21,21,21,21,20,20,21,21,19,20,21,20,21,21,20,21],"gf":[1.762,2.095,1.667,1.765,1.75,1.857,1.619,1.952,1.4,1.667,2.353,1.35,0.75,1.95,1.619,1.571,1.381,1.571,1.1,1.35,1.143,1,1.316,1.1,0.857,1.5,0.81,1.048,1.15,1.571],"ga":[1.095,1.381,1,1.412,1.1,1.333,1.286,1.571,1.3,1.143,1.647,1.1,1.15,1.8,1.714,1.19,1.619,1.286,1.85,1.85,1.429,1.619,1.211,1.4,1.905,1.4,1.857,2,1.4,1.81],"pts":[1.952,1.857,1.905,1.529,1.9,1.619,1.81,1.333,1.5,1.762,1.882,1.55,1.3,1.4,1.238,1.429,1.238,2,0.9,1.05,1.238,0.714,1.263,1.1,0.667,1.65,0.905,0.571,0.85,1.095],"xg_for":[1.81,1.738,1.586,1.647,1.6,1.733,1.671,1.967,1.45,1.433,1.788,1.495,1.25,1.635,1.567,1.367,1.252,1.281,1.35,1.385,1.443,1.324,1.242,1.255,1.186,1.225,1.1,1.214,0.985,1.005],"xg_ag":[1.138,1.343,1.1,1.118,1.02,1.29,1.371,1.657,1.14,1.148,1.535,1.235,1.265,1.725,1.595,1.338,1.319,1.505,1.545,1.54,1.557,1.61,1.442,1.645,1.51,1.57,1.467,1.667,1.5,1.986],"xpts":[1.726,1.711,1.707,1.69,1.679,1.641,1.571,1.564,1.557,1.547,1.543,1.485,1.423,1.408,1.377,1.374,1.329,1.302,1.271,1.267,1.262,1.226,1.204,1.186,1.172,1.151,1.147,1.139,1.03,0.835],"pts_over_exp":[4.761,3.06,4.15,-2.73,4.411,-0.453,5.014,-4.839,-1.145,4.52,5.761,1.305,-2.46,-0.159,-2.908,1.136,-1.916,14.658,-7.428,-4.346,-0.496,-10.737,1.124,-1.711,-10.612,9.983,-5.086,-11.918,-3.592,5.455]},"columns":[{"id":"team","name":"team","type":"character"},{"id":"gp","name":"gp","type":"numeric"},{"id":"gf","name":"gf","type":"numeric"},{"id":"ga","name":"ga","type":"numeric"},{"id":"pts","name":"pts","type":"numeric"},{"id":"xg_for","name":"xg_for","type":"numeric"},{"id":"xg_ag","name":"xg_ag","type":"numeric"},{"id":"xpts","name":"xpts","type":"numeric"},{"id":"pts_over_exp","name":"pts_over_exp","type":"numeric"}],"pagination":false,"dataKey":"1a7525e46636e608e3c831198c83c347"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="whitecaps-matches" class="level1">
+<h1>Whitecaps Matches</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span> <span class="sc">|</span> away <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">opponent =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, <span class="fu">str_c</span>(<span class="st">"@ "</span>, away), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">str_c</span>(<span class="st">"vs "</span>, home)), </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_gf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_score, away_score),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_ga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_score, home_score),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xgf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xg, away_xg),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_xg, home_xg),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xpts =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xpts, home_xpts),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">res =</span> <span class="fu">ifelse</span>(vwfc_gf <span class="sc">&gt;</span> vwfc_ga, <span class="st">"W"</span>, </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">ifelse</span>(vwfc_gf <span class="sc">==</span> vwfc_ga, <span class="st">"D"</span>, <span class="st">"L"</span>)), </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">result =</span> <span class="fu">str_c</span>(vwfc_gf, <span class="st">"-"</span>, vwfc_ga, <span class="st">" "</span>, res))<span class="sc">|&gt;</span> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, opponent, result, vwfc_xgf, vwfc_xga, vwfc_xpts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         date            opponent result vwfc_xgf vwfc_xga vwfc_xpts
+1  2025-02-23 vs Portland Timbers  4-1 W      3.0      0.7     0.307
+2  2025-03-02         @ LA Galaxy  2-1 W      1.9      0.6     2.316
+3  2025-03-08       @ CF Montréal  2-0 W      1.6      1.3     1.651
+4  2025-03-15        vs FC Dallas  1-0 W      0.8      0.2     0.735
+5  2025-03-22      @ Chicago Fire  1-3 L      1.2      2.2     0.834
+6  2025-03-29       vs Toronto FC  0-0 D      1.3      0.7     0.824
+7  2025-04-05   @ Colorado Rapids  2-0 W      2.0      0.3     2.554
+8  2025-04-12            @ Austin  5-1 W      4.5      0.7     2.836
+9  2025-04-19        vs St. Louis  0-0 D      1.1      1.0     1.300
+10 2025-04-27    vs Minnesota Utd  3-1 W      1.2      1.1     1.244
+11 2025-05-03    @ Real Salt Lake  2-1 W      2.9      1.6     2.133
+12 2025-05-11              @ LAFC  2-2 D      0.8      1.8     0.753
+13 2025-05-17           vs Austin  0-0 D      0.4      1.4     2.139
+14 2025-05-24   vs Real Salt Lake  3-2 W      3.0      1.0     0.450
+15 2025-05-28     @ Minnesota Utd  0-0 D      1.4      0.2     2.346
+16 2025-06-08  @ Seattle Sounders  3-0 W      1.9      0.6     2.277
+17 2025-06-14    vs Columbus Crew  1-2 L      0.7      1.2     1.769
+18 2025-06-25      @ San Diego FC  3-5 L      1.1      1.5     1.086
+19 2025-06-29             vs LAFC  1-0 W      0.7      0.9     1.520
+20 2025-07-04        vs LA Galaxy  0-3 L      0.5      1.4     2.145</code></pre>
 </div>
 </div>
 </section>

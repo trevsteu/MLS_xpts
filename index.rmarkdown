@@ -5,11 +5,13 @@ format: html
 editor: visual
 ---
 
+
 # Motivation:
 
 Note that his project is a work in progress. I will update as I have the time.
 
 # Setup:
+
 
 ```{r, results = "hide", message=FALSE, warning=FALSE}
 library(tidyr)
@@ -20,7 +22,9 @@ library(dplyr)
 library(reactable)
 ```
 
+
 # Code:
+
 
 ```{r, warning = FALSE, message=FALSE}
 url <- str_glue("https://fbref.com/en/comps/22/schedule/Major-League-Soccer-Scores-and-Fixtures")
@@ -71,9 +75,12 @@ xpts_table <- data |>
   arrange(desc(xpts))
 ```
 
+
 # Results
+
 
 ```{r}
 # use reactable to allow for interactive sorting
 reactable(xpts_table, pagination = FALSE)
 ```
+

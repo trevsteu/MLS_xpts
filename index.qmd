@@ -73,12 +73,10 @@ xpts_table <- data |>
          "scored" = ifelse(name == "home", home_score, away_score), 
          "against" = ifelse(name == "home", away_score, home_score), 
          "pts_over_exp" = pts - xpts) |>
-  select(team, "gf" = scored, "ga" = against, pts, xg_for, 
-           xg_ag, xpts, pts_over_exp) |> 
   group_by(team) |> 
-  summarize(gp = n(), across(gf:xpts, \(x) round(mean(x), 3)), 
+  summarize(gp = n(), across(scored:xpts, \(x) round(mean(x), 3)), 
             pts_over_exp = round(sum(pts_over_exp), 3)) |> 
-  arrange(desc(xpts))
+  arrange(desc(xpts)) 
 ```
 
 # Expected Points Table

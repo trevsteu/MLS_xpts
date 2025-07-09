@@ -5,6 +5,7 @@ Things I want to add
 - Add links to FBRef for teams and matches
 - Previous seasons (FBRef has xG data for MLS going back to 2018)
 - Other leagues
+- EDA of whether the model is good. Also explain the model
 - Make different pages for: 
   - MLS xPts table
   - VWFC Matches

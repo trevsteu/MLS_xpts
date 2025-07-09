@@ -76,7 +76,7 @@ xpts_table <- data |>
   group_by(team) |> 
   summarize(gp = n(), across(scored:xpts, \(x) round(mean(x), 3)), 
             pts_over_exp = round(sum(pts_over_exp), 3)) |> 
-  arrange(desc(xpts)) 
+  arrange(desc(xpts))
 ```
 
 # Expected Points Table

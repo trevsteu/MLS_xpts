@@ -131,7 +131,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reactable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reactable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="code" class="level1">
@@ -139,7 +140,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">str_glue</span>(<span class="st">"https://fbref.com/en/comps/22/2025/schedule/2025-Major-League-Soccer-Scores-and-Fixtures"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># number of times to simulate each match</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># number of times to simulate each match</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>) <span class="co"># for reproducibility</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -168,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">away_score =</span> <span class="st">"[0-9]+"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="st">"date"</span>, <span class="st">"home"</span>, <span class="st">"home_xg"</span> <span class="ot">=</span> <span class="st">"x_g"</span>, <span class="st">"home_score"</span>, </span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"away_score"</span>, <span class="st">"away_xg"</span> <span class="ot">=</span> <span class="st">"x_g_2"</span>, <span class="st">"away"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"home_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(home_score <span class="sc">&gt;</span> away_score, <span class="dv">3</span>, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="st">"home_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(home_score <span class="sc">&gt;</span> away_score, <span class="dv">3</span>, </span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(home_score <span class="sc">==</span> away_score, <span class="dv">1</span>, <span class="dv">0</span>)), </span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">"away_pts"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(away_score <span class="sc">&gt;</span> home_score, <span class="dv">3</span>, </span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">ifelse</span>(away_score <span class="sc">==</span> home_score, <span class="dv">1</span>, <span class="dv">0</span>))) <span class="sc">|&gt;</span></span>
@@ -207,12 +208,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>         <span class="st">"scored"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, home_score, away_score), </span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>         <span class="st">"against"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(name <span class="sc">==</span> <span class="st">"home"</span>, away_score, home_score), </span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>         <span class="st">"pts_over_exp"</span> <span class="ot">=</span> pts <span class="sc">-</span> xpts) <span class="sc">|&gt;</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team, <span class="st">"gf"</span> <span class="ot">=</span> scored, <span class="st">"ga"</span> <span class="ot">=</span> against, pts, xg_for, </span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>           xg_ag, xpts, pts_over_exp) <span class="sc">|&gt;</span> </span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team) <span class="sc">|&gt;</span> </span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">gp =</span> <span class="fu">n</span>(), <span class="fu">across</span>(gf<span class="sc">:</span>xpts, \(x) <span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">3</span>)), </span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">pts_over_exp =</span> <span class="fu">round</span>(<span class="fu">sum</span>(pts_over_exp), <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(xpts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team) <span class="sc">|&gt;</span> </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">gp =</span> <span class="fu">n</span>(), <span class="fu">across</span>(scored<span class="sc">:</span>xpts, \(x) <span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">3</span>)), </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">pts_over_exp =</span> <span class="fu">round</span>(<span class="fu">sum</span>(pts_over_exp), <span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(xpts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="expected-points-table" class="level1">
@@ -221,47 +220,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use reactable to allow for interactive sorting</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">reactable</span>(xpts_table, <span class="at">pagination =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-381244ed9ec71dfd44a5" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-381244ed9ec71dfd44a5">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"team":["Nashville SC","San Diego FC","Philadelphia Union","LAFC","Vancouver W'caps","Orlando City","Columbus Crew","SJ Earthquakes","Seattle Sounders","Minnesota Utd","Inter Miami","NYCFC","Austin","Chicago Fire","Charlotte","NY Red Bulls","Houston Dynamo","FC Cincinnati","Atlanta Utd","FC Dallas","Colorado Rapids","St. Louis","NE Revolution","Real Salt Lake","CF Montréal","Portland Timbers","D.C. United","LA Galaxy","Toronto FC","Sporting KC"],"gp":[21,21,21,17,20,21,21,21,20,21,17,20,20,20,21,21,21,21,20,20,21,21,19,20,21,20,21,21,20,21],"gf":[1.762,2.095,1.667,1.765,1.75,1.857,1.619,1.952,1.4,1.667,2.353,1.35,0.75,1.95,1.619,1.571,1.381,1.571,1.1,1.35,1.143,1,1.316,1.1,0.857,1.5,0.81,1.048,1.15,1.571],"ga":[1.095,1.381,1,1.412,1.1,1.333,1.286,1.571,1.3,1.143,1.647,1.1,1.15,1.8,1.714,1.19,1.619,1.286,1.85,1.85,1.429,1.619,1.211,1.4,1.905,1.4,1.857,2,1.4,1.81],"pts":[1.952,1.857,1.905,1.529,1.9,1.619,1.81,1.333,1.5,1.762,1.882,1.55,1.3,1.4,1.238,1.429,1.238,2,0.9,1.05,1.238,0.714,1.263,1.1,0.667,1.65,0.905,0.571,0.85,1.095],"xg_for":[1.81,1.738,1.586,1.647,1.6,1.733,1.671,1.967,1.45,1.433,1.788,1.495,1.25,1.635,1.567,1.367,1.252,1.281,1.35,1.385,1.443,1.324,1.242,1.255,1.186,1.225,1.1,1.214,0.985,1.005],"xg_ag":[1.138,1.343,1.1,1.118,1.02,1.29,1.371,1.657,1.14,1.148,1.535,1.235,1.265,1.725,1.595,1.338,1.319,1.505,1.545,1.54,1.557,1.61,1.442,1.645,1.51,1.57,1.467,1.667,1.5,1.986],"xpts":[1.726,1.711,1.707,1.69,1.679,1.641,1.571,1.564,1.557,1.547,1.543,1.485,1.423,1.408,1.377,1.374,1.329,1.302,1.271,1.267,1.262,1.226,1.204,1.186,1.172,1.151,1.147,1.139,1.03,0.835],"pts_over_exp":[4.761,3.06,4.15,-2.73,4.411,-0.453,5.014,-4.839,-1.145,4.52,5.761,1.305,-2.46,-0.159,-2.908,1.136,-1.916,14.658,-7.428,-4.346,-0.496,-10.737,1.124,-1.711,-10.612,9.983,-5.086,-11.918,-3.592,5.455]},"columns":[{"id":"team","name":"team","type":"character"},{"id":"gp","name":"gp","type":"numeric"},{"id":"gf","name":"gf","type":"numeric"},{"id":"ga","name":"ga","type":"numeric"},{"id":"pts","name":"pts","type":"numeric"},{"id":"xg_for","name":"xg_for","type":"numeric"},{"id":"xg_ag","name":"xg_ag","type":"numeric"},{"id":"xpts","name":"xpts","type":"numeric"},{"id":"pts_over_exp","name":"pts_over_exp","type":"numeric"}],"pagination":false,"dataKey":"1a7525e46636e608e3c831198c83c347"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-8cefdcbf8c1e62f89de8" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-8cefdcbf8c1e62f89de8">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"team":["Nashville SC","San Diego FC","Philadelphia Union","LAFC","Vancouver W'caps","Orlando City","Columbus Crew","SJ Earthquakes","Seattle Sounders","Inter Miami","Minnesota Utd","NYCFC","Austin","Chicago Fire","Charlotte","NY Red Bulls","Houston Dynamo","FC Cincinnati","Colorado Rapids","Atlanta Utd","FC Dallas","St. Louis","NE Revolution","Real Salt Lake","CF Montréal","Portland Timbers","D.C. United","LA Galaxy","Toronto FC","Sporting KC"],"gp":[21,21,21,17,20,21,21,21,20,17,21,20,20,20,21,21,21,21,21,20,20,21,19,20,21,20,21,21,20,21],"scored":[1.762,2.095,1.667,1.765,1.75,1.857,1.619,1.952,1.4,2.353,1.667,1.35,0.75,1.95,1.619,1.571,1.381,1.571,1.143,1.1,1.35,1,1.316,1.1,0.857,1.5,0.81,1.048,1.15,1.571],"xg_ag":[1.138,1.343,1.1,1.118,1.02,1.29,1.371,1.657,1.14,1.535,1.148,1.235,1.265,1.725,1.595,1.338,1.319,1.505,1.557,1.545,1.54,1.61,1.442,1.645,1.51,1.57,1.467,1.667,1.5,1.986],"xg_for":[1.81,1.738,1.586,1.647,1.6,1.733,1.671,1.967,1.45,1.788,1.433,1.495,1.25,1.635,1.567,1.367,1.252,1.281,1.443,1.35,1.385,1.324,1.242,1.255,1.186,1.225,1.1,1.214,0.985,1.005],"xpts":[1.738,1.711,1.706,1.691,1.675,1.643,1.575,1.575,1.555,1.551,1.544,1.494,1.421,1.421,1.376,1.365,1.321,1.298,1.276,1.272,1.26,1.23,1.198,1.187,1.175,1.151,1.147,1.132,1.02,0.836],"pts_over_exp":[4.499,3.065,4.171,-2.742,4.506,-0.511,4.916,-5.072,-1.101,5.627,4.584,1.121,-2.41,-0.422,-2.887,1.333,-1.745,14.749,-0.8,-7.431,-4.193,-10.823,1.23,-1.748,-10.675,9.985,-5.09,-11.779,-3.402,5.449]},"columns":[{"id":"team","name":"team","type":"character"},{"id":"gp","name":"gp","type":"numeric"},{"id":"scored","name":"scored","type":"numeric"},{"id":"xg_ag","name":"xg_ag","type":"numeric"},{"id":"xg_for","name":"xg_for","type":"numeric"},{"id":"xpts","name":"xpts","type":"numeric"},{"id":"pts_over_exp","name":"pts_over_exp","type":"numeric"}],"pagination":false,"dataKey":"1c16b863aa78773ed597f1370b0a97ca"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
 <section id="whitecaps-matches" class="level1">
 <h1>Whitecaps Matches</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>vwfc_matches <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span> <span class="sc">|</span> away <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">opponent =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, <span class="fu">str_c</span>(<span class="st">"vs "</span>, away), </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">str_c</span>(<span class="st">"@ "</span>, home)), </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_gf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_score, away_score),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_ga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_score, home_score),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xgf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xg, away_xg),</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_xg, home_xg),</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xpts =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xpts, away_xpts),</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>vwfc_matches <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span> <span class="sc">|</span> away <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">opponent =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, <span class="fu">str_c</span>(<span class="st">"vs "</span>, away), </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">str_c</span>(<span class="st">"@ "</span>, home)), </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_gf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_score, away_score),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_ga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_score, home_score),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xgf =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, home_xg, away_xg),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">vwfc_xga =</span> <span class="fu">ifelse</span>(home <span class="sc">==</span> <span class="st">"Vancouver W'caps"</span>, away_xg, home_xg),</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">res =</span> <span class="fu">ifelse</span>(vwfc_gf <span class="sc">&gt;</span> vwfc_ga, <span class="st">"W"</span>, </span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">ifelse</span>(vwfc_gf <span class="sc">==</span> vwfc_ga, <span class="st">"D"</span>, <span class="st">"L"</span>)), </span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">result =</span> <span class="fu">str_c</span>(vwfc_gf, <span class="st">"-"</span>, vwfc_ga, <span class="st">" "</span>, res))<span class="sc">|&gt;</span> </span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, opponent, result, vwfc_xgf, vwfc_xga, vwfc_xpts)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, opponent, result, vwfc_xgf, vwfc_xga)</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">gt</span>(vwfc_matches)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>vwfc_pwin <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(vwfc_matches))</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>vwfc_pdraw <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(vwfc_matches))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>vwfc_xpts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">times =</span> <span class="fu">nrow</span>(vwfc_matches))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(vwfc_matches)){</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  vwfc_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, vwfc_matches<span class="sc">$</span>vwfc_xgf[i])</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  opp_sim <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, vwfc_matches<span class="sc">$</span>vwfc_xga[i])</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  vwfc_pwin[i] <span class="ot">&lt;-</span> <span class="fu">label_percent</span>(<span class="at">accuracy =</span> <span class="fl">0.01</span>)(<span class="fu">round</span>(<span class="fu">sum</span>(vwfc_sim <span class="sc">&gt;</span> opp_sim) <span class="sc">/</span> n, <span class="dv">4</span>))</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  vwfc_pdraw[i] <span class="ot">&lt;-</span> <span class="fu">label_percent</span>(<span class="at">accuracy =</span> <span class="fl">0.01</span>)(<span class="fu">round</span>(<span class="fu">sum</span>(vwfc_sim <span class="sc">==</span> opp_sim) <span class="sc">/</span> n, <span class="dv">4</span>))</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  vwfc_xpts[i] <span class="ot">&lt;-</span> <span class="fu">round</span>((<span class="dv">3</span><span class="sc">*</span><span class="fu">sum</span>(vwfc_sim <span class="sc">&gt;</span> opp_sim) <span class="sc">+</span> </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">sum</span>(vwfc_sim <span class="sc">==</span> opp_sim))<span class="sc">/</span>n, <span class="dv">3</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>vwfc_matches <span class="ot">&lt;-</span> <span class="fu">cbind</span>(vwfc_matches, vwfc_pwin, vwfc_pdraw, vwfc_xpts)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>vwfc_matches <span class="sc">|&gt;</span> </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"Date"</span> <span class="ot">=</span> date, <span class="st">"Opponent"</span> <span class="ot">=</span> opponent, <span class="st">"Result"</span> <span class="ot">=</span> result, </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xGF"</span> <span class="ot">=</span> vwfc_xgf, <span class="st">"xGA"</span> <span class="ot">=</span> vwfc_xga, <span class="st">"xPts"</span> <span class="ot">=</span> vwfc_xpts, </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>         <span class="st">"VWFC Win"</span> <span class="ot">=</span> vwfc_pwin, <span class="st">"VWFC Draw"</span> <span class="ot">=</span> vwfc_pdraw) <span class="sc">|&gt;</span> </span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="ysenhefwwd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ysenhefwwd table {
+<div id="ydleppntxo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ydleppntxo table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ysenhefwwd thead, #ysenhefwwd tbody, #ysenhefwwd tfoot, #ysenhefwwd tr, #ysenhefwwd td, #ysenhefwwd th {
+#ydleppntxo thead, #ydleppntxo tbody, #ydleppntxo tfoot, #ydleppntxo tr, #ydleppntxo td, #ydleppntxo th {
   border-style: none;
 }
 
-#ysenhefwwd p {
+#ydleppntxo p {
   margin: 0;
   padding: 0;
 }
 
-#ysenhefwwd .gt_table {
+#ydleppntxo .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -287,12 +303,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_caption {
+#ydleppntxo .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ysenhefwwd .gt_title {
+#ydleppntxo .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -304,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#ysenhefwwd .gt_subtitle {
+#ydleppntxo .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -316,7 +332,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#ysenhefwwd .gt_heading {
+#ydleppntxo .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -328,13 +344,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_bottom_border {
+#ydleppntxo .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_col_headings {
+#ydleppntxo .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -349,7 +365,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_col_heading {
+#ydleppntxo .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -369,7 +385,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ysenhefwwd .gt_column_spanner_outer {
+#ydleppntxo .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -381,15 +397,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#ysenhefwwd .gt_column_spanner_outer:first-child {
+#ydleppntxo .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ysenhefwwd .gt_column_spanner_outer:last-child {
+#ydleppntxo .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ysenhefwwd .gt_column_spanner {
+#ydleppntxo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -401,11 +417,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#ysenhefwwd .gt_spanner_row {
+#ydleppntxo .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ysenhefwwd .gt_group_heading {
+#ydleppntxo .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -431,7 +447,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#ysenhefwwd .gt_empty_group_heading {
+#ydleppntxo .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -446,15 +462,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#ysenhefwwd .gt_from_md > :first-child {
+#ydleppntxo .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ysenhefwwd .gt_from_md > :last-child {
+#ydleppntxo .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ysenhefwwd .gt_row {
+#ydleppntxo .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -473,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ysenhefwwd .gt_stub {
+#ydleppntxo .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -486,7 +502,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ysenhefwwd .gt_stub_row_group {
+#ydleppntxo .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -500,15 +516,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#ysenhefwwd .gt_row_group_first td {
+#ydleppntxo .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ysenhefwwd .gt_row_group_first th {
+#ydleppntxo .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ysenhefwwd .gt_summary_row {
+#ydleppntxo .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -518,16 +534,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ysenhefwwd .gt_first_summary_row {
+#ydleppntxo .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_first_summary_row.thick {
+#ydleppntxo .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ysenhefwwd .gt_last_summary_row {
+#ydleppntxo .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -537,7 +553,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_grand_summary_row {
+#ydleppntxo .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -547,7 +563,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ysenhefwwd .gt_first_grand_summary_row {
+#ydleppntxo .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -557,7 +573,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_last_grand_summary_row_top {
+#ydleppntxo .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -567,11 +583,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_striped {
+#ydleppntxo .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ysenhefwwd .gt_table_body {
+#ydleppntxo .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -580,7 +596,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_footnotes {
+#ydleppntxo .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -594,7 +610,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_footnote {
+#ydleppntxo .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -603,7 +619,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ysenhefwwd .gt_sourcenotes {
+#ydleppntxo .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -617,7 +633,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ysenhefwwd .gt_sourcenote {
+#ydleppntxo .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -625,72 +641,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ysenhefwwd .gt_left {
+#ydleppntxo .gt_left {
   text-align: left;
 }
 
-#ysenhefwwd .gt_center {
+#ydleppntxo .gt_center {
   text-align: center;
 }
 
-#ysenhefwwd .gt_right {
+#ydleppntxo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ysenhefwwd .gt_font_normal {
+#ydleppntxo .gt_font_normal {
   font-weight: normal;
 }
 
-#ysenhefwwd .gt_font_bold {
+#ydleppntxo .gt_font_bold {
   font-weight: bold;
 }
 
-#ysenhefwwd .gt_font_italic {
+#ydleppntxo .gt_font_italic {
   font-style: italic;
 }
 
-#ysenhefwwd .gt_super {
+#ydleppntxo .gt_super {
   font-size: 65%;
 }
 
-#ysenhefwwd .gt_footnote_marks {
+#ydleppntxo .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ysenhefwwd .gt_asterisk {
+#ydleppntxo .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ysenhefwwd .gt_indent_1 {
+#ydleppntxo .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ysenhefwwd .gt_indent_2 {
+#ydleppntxo .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ysenhefwwd .gt_indent_3 {
+#ydleppntxo .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ysenhefwwd .gt_indent_4 {
+#ydleppntxo .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ysenhefwwd .gt_indent_5 {
+#ydleppntxo .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ysenhefwwd .katex-display {
+#ydleppntxo .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ysenhefwwd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ydleppntxo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -698,174 +714,216 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="header gt_col_headings">
-<th id="date" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">date</th>
-<th id="opponent" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">opponent</th>
-<th id="result" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">result</th>
-<th id="vwfc_xgf" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">vwfc_xgf</th>
-<th id="vwfc_xga" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">vwfc_xga</th>
-<th id="vwfc_xpts" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">vwfc_xpts</th>
+<th id="Date" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Date</th>
+<th id="Opponent" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Opponent</th>
+<th id="Result" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Result</th>
+<th id="xGF" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">xGF</th>
+<th id="xGA" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">xGA</th>
+<th id="xPts" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">xPts</th>
+<th id="VWFC-Win" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">VWFC Win</th>
+<th id="VWFC-Draw" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">VWFC Draw</th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-02-23</td>
-<td class="gt_row gt_left" headers="opponent">@ Portland Timbers</td>
-<td class="gt_row gt_left" headers="result">4-1 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">3.0</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.593</td>
+<td class="gt_row gt_right" headers="Date">2025-02-23</td>
+<td class="gt_row gt_left" headers="Opponent">@ Portland Timbers</td>
+<td class="gt_row gt_left" headers="Result">4-1 W</td>
+<td class="gt_row gt_right" headers="xGF">3.0</td>
+<td class="gt_row gt_right" headers="xGA">0.7</td>
+<td class="gt_row gt_right" headers="xPts">2.590</td>
+<td class="gt_row gt_right" headers="VWFC Win">82.42%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">11.70%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-03-02</td>
-<td class="gt_row gt_left" headers="opponent">vs LA Galaxy</td>
-<td class="gt_row gt_left" headers="result">2-1 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.9</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.6</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.316</td>
+<td class="gt_row gt_right" headers="Date">2025-03-02</td>
+<td class="gt_row gt_left" headers="Opponent">vs LA Galaxy</td>
+<td class="gt_row gt_left" headers="Result">2-1 W</td>
+<td class="gt_row gt_right" headers="xGF">1.9</td>
+<td class="gt_row gt_right" headers="xGA">0.6</td>
+<td class="gt_row gt_right" headers="xPts">2.260</td>
+<td class="gt_row gt_right" headers="VWFC Win">68.66%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">19.98%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-03-08</td>
-<td class="gt_row gt_left" headers="opponent">vs CF Montréal</td>
-<td class="gt_row gt_left" headers="result">2-0 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.6</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.3</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.651</td>
+<td class="gt_row gt_right" headers="Date">2025-03-08</td>
+<td class="gt_row gt_left" headers="Opponent">vs CF Montréal</td>
+<td class="gt_row gt_left" headers="Result">2-0 W</td>
+<td class="gt_row gt_right" headers="xGF">1.6</td>
+<td class="gt_row gt_right" headers="xGA">1.3</td>
+<td class="gt_row gt_right" headers="xPts">1.560</td>
+<td class="gt_row gt_right" headers="VWFC Win">43.76%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">24.76%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-03-15</td>
-<td class="gt_row gt_left" headers="opponent">@ FC Dallas</td>
-<td class="gt_row gt_left" headers="result">1-0 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">0.8</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.2</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.815</td>
+<td class="gt_row gt_right" headers="Date">2025-03-15</td>
+<td class="gt_row gt_left" headers="Opponent">@ FC Dallas</td>
+<td class="gt_row gt_left" headers="Result">1-0 W</td>
+<td class="gt_row gt_right" headers="xGF">0.8</td>
+<td class="gt_row gt_right" headers="xGA">0.2</td>
+<td class="gt_row gt_right" headers="xPts">1.865</td>
+<td class="gt_row gt_right" headers="VWFC Win">47.89%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">42.85%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-03-22</td>
-<td class="gt_row gt_left" headers="opponent">vs Chicago Fire</td>
-<td class="gt_row gt_left" headers="result">1-3 L</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.2</td>
-<td class="gt_row gt_right" headers="vwfc_xga">2.2</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.834</td>
+<td class="gt_row gt_right" headers="Date">2025-03-22</td>
+<td class="gt_row gt_left" headers="Opponent">vs Chicago Fire</td>
+<td class="gt_row gt_left" headers="Result">1-3 L</td>
+<td class="gt_row gt_right" headers="xGF">1.2</td>
+<td class="gt_row gt_right" headers="xGA">2.2</td>
+<td class="gt_row gt_right" headers="xPts">0.813</td>
+<td class="gt_row gt_right" headers="VWFC Win">20.28%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">20.42%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-03-29</td>
-<td class="gt_row gt_left" headers="opponent">@ Toronto FC</td>
-<td class="gt_row gt_left" headers="result">0-0 D</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.3</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.877</td>
+<td class="gt_row gt_right" headers="Date">2025-03-29</td>
+<td class="gt_row gt_left" headers="Opponent">@ Toronto FC</td>
+<td class="gt_row gt_left" headers="Result">0-0 D</td>
+<td class="gt_row gt_right" headers="xGF">1.3</td>
+<td class="gt_row gt_right" headers="xGA">0.7</td>
+<td class="gt_row gt_right" headers="xPts">1.824</td>
+<td class="gt_row gt_right" headers="VWFC Win">51.52%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">27.84%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-04-05</td>
-<td class="gt_row gt_left" headers="opponent">vs Colorado Rapids</td>
-<td class="gt_row gt_left" headers="result">2-0 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">2.0</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.3</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.554</td>
+<td class="gt_row gt_right" headers="Date">2025-04-05</td>
+<td class="gt_row gt_left" headers="Opponent">vs Colorado Rapids</td>
+<td class="gt_row gt_left" headers="Result">2-0 W</td>
+<td class="gt_row gt_right" headers="xGF">2.0</td>
+<td class="gt_row gt_right" headers="xGA">0.3</td>
+<td class="gt_row gt_right" headers="xPts">2.532</td>
+<td class="gt_row gt_right" headers="VWFC Win">78.99%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">16.22%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-04-12</td>
-<td class="gt_row gt_left" headers="opponent">vs Austin</td>
-<td class="gt_row gt_left" headers="result">5-1 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">4.5</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.7</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.836</td>
+<td class="gt_row gt_right" headers="Date">2025-04-12</td>
+<td class="gt_row gt_left" headers="Opponent">vs Austin</td>
+<td class="gt_row gt_left" headers="Result">5-1 W</td>
+<td class="gt_row gt_right" headers="xGF">4.5</td>
+<td class="gt_row gt_right" headers="xGA">0.7</td>
+<td class="gt_row gt_right" headers="xPts">2.861</td>
+<td class="gt_row gt_right" headers="VWFC Win">94.07%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">3.92%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-04-19</td>
-<td class="gt_row gt_left" headers="opponent">@ St. Louis</td>
-<td class="gt_row gt_left" headers="result">0-0 D</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.1</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.0</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.393</td>
+<td class="gt_row gt_right" headers="Date">2025-04-19</td>
+<td class="gt_row gt_left" headers="Opponent">@ St. Louis</td>
+<td class="gt_row gt_left" headers="Result">0-0 D</td>
+<td class="gt_row gt_right" headers="xGF">1.1</td>
+<td class="gt_row gt_right" headers="xGA">1.0</td>
+<td class="gt_row gt_right" headers="xPts">1.424</td>
+<td class="gt_row gt_right" headers="VWFC Win">37.32%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">30.40%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-04-27</td>
-<td class="gt_row gt_left" headers="opponent">@ Minnesota Utd</td>
-<td class="gt_row gt_left" headers="result">3-1 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.2</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.1</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.472</td>
+<td class="gt_row gt_right" headers="Date">2025-04-27</td>
+<td class="gt_row gt_left" headers="Opponent">@ Minnesota Utd</td>
+<td class="gt_row gt_left" headers="Result">3-1 W</td>
+<td class="gt_row gt_right" headers="xGF">1.2</td>
+<td class="gt_row gt_right" headers="xGA">1.1</td>
+<td class="gt_row gt_right" headers="xPts">1.428</td>
+<td class="gt_row gt_right" headers="VWFC Win">38.12%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">28.42%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-05-03</td>
-<td class="gt_row gt_left" headers="opponent">vs Real Salt Lake</td>
-<td class="gt_row gt_left" headers="result">2-1 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">2.9</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.6</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.133</td>
+<td class="gt_row gt_right" headers="Date">2025-05-03</td>
+<td class="gt_row gt_left" headers="Opponent">vs Real Salt Lake</td>
+<td class="gt_row gt_left" headers="Result">2-1 W</td>
+<td class="gt_row gt_right" headers="xGF">2.9</td>
+<td class="gt_row gt_right" headers="xGA">1.6</td>
+<td class="gt_row gt_right" headers="xPts">2.093</td>
+<td class="gt_row gt_right" headers="VWFC Win">64.28%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">16.47%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-05-11</td>
-<td class="gt_row gt_left" headers="opponent">vs LAFC</td>
-<td class="gt_row gt_left" headers="result">2-2 D</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">0.8</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.8</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.753</td>
+<td class="gt_row gt_right" headers="Date">2025-05-11</td>
+<td class="gt_row gt_left" headers="Opponent">vs LAFC</td>
+<td class="gt_row gt_left" headers="Result">2-2 D</td>
+<td class="gt_row gt_right" headers="xGF">0.8</td>
+<td class="gt_row gt_right" headers="xGA">1.8</td>
+<td class="gt_row gt_right" headers="xPts">0.698</td>
+<td class="gt_row gt_right" headers="VWFC Win">15.65%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">22.84%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-05-17</td>
-<td class="gt_row gt_left" headers="opponent">@ Austin</td>
-<td class="gt_row gt_left" headers="result">0-0 D</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">0.4</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.4</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.585</td>
+<td class="gt_row gt_right" headers="Date">2025-05-17</td>
+<td class="gt_row gt_left" headers="Opponent">@ Austin</td>
+<td class="gt_row gt_left" headers="Result">0-0 D</td>
+<td class="gt_row gt_right" headers="xGF">0.4</td>
+<td class="gt_row gt_right" headers="xGA">1.4</td>
+<td class="gt_row gt_right" headers="xPts">0.578</td>
+<td class="gt_row gt_right" headers="VWFC Win">10.31%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">26.88%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-05-24</td>
-<td class="gt_row gt_left" headers="opponent">@ Real Salt Lake</td>
-<td class="gt_row gt_left" headers="result">3-2 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">3.0</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.0</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.415</td>
+<td class="gt_row gt_right" headers="Date">2025-05-24</td>
+<td class="gt_row gt_left" headers="Opponent">@ Real Salt Lake</td>
+<td class="gt_row gt_left" headers="Result">3-2 W</td>
+<td class="gt_row gt_right" headers="xGF">3.0</td>
+<td class="gt_row gt_right" headers="xGA">1.0</td>
+<td class="gt_row gt_right" headers="xPts">2.465</td>
+<td class="gt_row gt_right" headers="VWFC Win">77.76%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">13.25%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-05-28</td>
-<td class="gt_row gt_left" headers="opponent">vs Minnesota Utd</td>
-<td class="gt_row gt_left" headers="result">0-0 D</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.4</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.2</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.346</td>
+<td class="gt_row gt_right" headers="Date">2025-05-28</td>
+<td class="gt_row gt_left" headers="Opponent">vs Minnesota Utd</td>
+<td class="gt_row gt_left" headers="Result">0-0 D</td>
+<td class="gt_row gt_right" headers="xGF">1.4</td>
+<td class="gt_row gt_right" headers="xGA">0.2</td>
+<td class="gt_row gt_right" headers="xPts">2.332</td>
+<td class="gt_row gt_right" headers="VWFC Win">69.00%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">26.22%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-06-08</td>
-<td class="gt_row gt_left" headers="opponent">vs Seattle Sounders</td>
-<td class="gt_row gt_left" headers="result">3-0 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.9</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.6</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">2.277</td>
+<td class="gt_row gt_right" headers="Date">2025-06-08</td>
+<td class="gt_row gt_left" headers="Opponent">vs Seattle Sounders</td>
+<td class="gt_row gt_left" headers="Result">3-0 W</td>
+<td class="gt_row gt_right" headers="xGF">1.9</td>
+<td class="gt_row gt_right" headers="xGA">0.6</td>
+<td class="gt_row gt_right" headers="xPts">2.282</td>
+<td class="gt_row gt_right" headers="VWFC Win">69.34%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">20.22%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-06-14</td>
-<td class="gt_row gt_left" headers="opponent">@ Columbus Crew</td>
-<td class="gt_row gt_left" headers="result">1-2 L</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">0.7</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.2</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.917</td>
+<td class="gt_row gt_right" headers="Date">2025-06-14</td>
+<td class="gt_row gt_left" headers="Opponent">@ Columbus Crew</td>
+<td class="gt_row gt_left" headers="Result">1-2 L</td>
+<td class="gt_row gt_right" headers="xGF">0.7</td>
+<td class="gt_row gt_right" headers="xGA">1.2</td>
+<td class="gt_row gt_right" headers="xPts">0.933</td>
+<td class="gt_row gt_right" headers="VWFC Win">20.69%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">31.23%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-06-25</td>
-<td class="gt_row gt_left" headers="opponent">vs San Diego FC</td>
-<td class="gt_row gt_left" headers="result">3-5 L</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">1.1</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.5</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.086</td>
+<td class="gt_row gt_right" headers="Date">2025-06-25</td>
+<td class="gt_row gt_left" headers="Opponent">vs San Diego FC</td>
+<td class="gt_row gt_left" headers="Result">3-5 L</td>
+<td class="gt_row gt_right" headers="xGF">1.1</td>
+<td class="gt_row gt_right" headers="xGA">1.5</td>
+<td class="gt_row gt_right" headers="xPts">1.098</td>
+<td class="gt_row gt_right" headers="VWFC Win">28.03%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">25.70%</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="date">2025-06-29</td>
-<td class="gt_row gt_left" headers="opponent">@ LAFC</td>
-<td class="gt_row gt_left" headers="result">1-0 W</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">0.7</td>
-<td class="gt_row gt_right" headers="vwfc_xga">0.9</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">1.139</td>
+<td class="gt_row gt_right" headers="Date">2025-06-29</td>
+<td class="gt_row gt_left" headers="Opponent">@ LAFC</td>
+<td class="gt_row gt_left" headers="Result">1-0 W</td>
+<td class="gt_row gt_right" headers="xGF">0.7</td>
+<td class="gt_row gt_right" headers="xGA">0.9</td>
+<td class="gt_row gt_right" headers="xPts">1.154</td>
+<td class="gt_row gt_right" headers="VWFC Win">26.55%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">35.73%</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="date">2025-07-04</td>
-<td class="gt_row gt_left" headers="opponent">@ LA Galaxy</td>
-<td class="gt_row gt_left" headers="result">0-3 L</td>
-<td class="gt_row gt_right" headers="vwfc_xgf">0.5</td>
-<td class="gt_row gt_right" headers="vwfc_xga">1.4</td>
-<td class="gt_row gt_right" headers="vwfc_xpts">0.597</td>
+<td class="gt_row gt_right" headers="Date">2025-07-04</td>
+<td class="gt_row gt_left" headers="Opponent">@ LA Galaxy</td>
+<td class="gt_row gt_left" headers="Result">0-3 L</td>
+<td class="gt_row gt_right" headers="xGF">0.5</td>
+<td class="gt_row gt_right" headers="xGA">1.4</td>
+<td class="gt_row gt_right" headers="xPts">0.703</td>
+<td class="gt_row gt_right" headers="VWFC Win">14.19%</td>
+<td class="gt_row gt_right" headers="VWFC Draw">27.73%</td>
 </tr>
 </tbody>
 </table>

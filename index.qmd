@@ -17,15 +17,16 @@ library(tidyverse)
 library(gt)
 library(rvest)
 library(dplyr)
+library(scales)
 library(reactable)
 ```
 
 # Code:
 
 ```{r, warning = FALSE, message=FALSE}
-url <- str_glue("https://fbref.com/en/comps/22/schedule/Major-League-Soccer-Scores-and-Fixtures")
+url <- str_glue("https://fbref.com/en/comps/22/2025/schedule/2025-Major-League-Soccer-Scores-and-Fixtures")
 
-n <- 1000 # number of times to simulate each match
+n <- 10000 # number of times to simulate each match
 set.seed(2025) # for reproducibility
 
 
@@ -38,12 +39,12 @@ head(html_table)
 
 data <- html_table |> 
   janitor::clean_names() |> 
-  filter(date != "Date" & score != "") |> 
+  filter(date != "Date" & score != "") |>
   separate_wider_regex(score, patterns = c(home_score = "[0-9]+", "–", 
                                     away_score = "[0-9]+")) |>
     select("date", "home", "home_xg" = "x_g", "home_score", 
            "away_score", "away_xg" = "x_g_2", "away") |> 
-  mutate("home_pts" = ifelse(home_score > away_score, 3, 
+    mutate("home_pts" = ifelse(home_score > away_score, 3, 
                              ifelse(home_score == away_score, 1, 0)), 
          "away_pts" = ifelse(away_score > home_score, 3, 
                              ifelse(away_score == home_score, 1, 0))) |>
@@ -90,6 +91,7 @@ reactable(xpts_table, pagination = FALSE)
 # Whitecaps Matches
 
 ```{r}
+set.seed(2025)
 vwfc_matches <- data |> 
   filter(home == "Vancouver W'caps" | away == "Vancouver W'caps") |> 
   mutate(opponent = ifelse(home == "Vancouver W'caps", str_c("vs ", away), 
@@ -98,11 +100,47 @@ vwfc_matches <- data |>
          vwfc_ga = ifelse(home == "Vancouver W'caps", away_score, home_score),
          vwfc_xgf = ifelse(home == "Vancouver W'caps", home_xg, away_xg),
          vwfc_xga = ifelse(home == "Vancouver W'caps", away_xg, home_xg),
-         vwfc_xpts = ifelse(home == "Vancouver W'caps", home_xpts, away_xpts),
          res = ifelse(vwfc_gf > vwfc_ga, "W", 
                       ifelse(vwfc_gf == vwfc_ga, "D", "L")), 
          result = str_c(vwfc_gf, "-", vwfc_ga, " ", res))|> 
-  select(date, opponent, result, vwfc_xgf, vwfc_xga, vwfc_xpts)
+  select(date, opponent, result, vwfc_xgf, vwfc_xga)
 
-gt(vwfc_matches)
+vwfc_pwin <- rep(NA, times = nrow(vwfc_matches))
+vwfc_pdraw <- rep(NA, times = nrow(vwfc_matches))
+vwfc_xpts <- rep(NA, times = nrow(vwfc_matches))
+for(i in 1:nrow(vwfc_matches)){
+  vwfc_sim <- rpois(n, vwfc_matches$vwfc_xgf[i])
+  opp_sim <- rpois(n, vwfc_matches$vwfc_xga[i])
+  vwfc_pwin[i] <- label_percent(accuracy = 0.01)(round(sum(vwfc_sim > opp_sim) / n, 4))
+  vwfc_pdraw[i] <- label_percent(accuracy = 0.01)(round(sum(vwfc_sim == opp_sim) / n, 4))
+  vwfc_xpts[i] <- round((3*sum(vwfc_sim > opp_sim) + 
+                          sum(vwfc_sim == opp_sim))/n, 3)
+}
+vwfc_matches <- cbind(vwfc_matches, vwfc_pwin, vwfc_pdraw, vwfc_xpts)
+
+vwfc_matches |> 
+  select("Date" = date, "Opponent" = opponent, "Result" = result, 
+         "xGF" = vwfc_xgf, "xGA" = vwfc_xga, "xPts" = vwfc_xpts, 
+         "VWFC Win" = vwfc_pwin, "VWFC Draw" = vwfc_pdraw) |> 
+  gt()
 ```
+
+# Things I want to add
+
+-   Team logos
+
+-   Make tables formatted more nicely in terms of column widths
+
+-   Add links to FBRef for teams and matches
+
+-   Previous seasons (FBRef has xG data for MLS going back to 2018)
+
+-   Other leagues
+
+-   Make different pages for:
+
+    -   MLS xPts table
+
+    -   VWFC Matches
+
+    -   How I did it/motivation

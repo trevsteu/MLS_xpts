@@ -67,14 +67,14 @@ data <- cbind(data, home_xpts, away_xpts)
 xpts_table <- data |>
   pivot_longer(cols = c("home", "away"), values_to = "team") |> 
   mutate("pts" = ifelse(name == "home", home_pts, away_pts),
-         "xpts" = ifelse(name == "home", home_xpts, away_xpts), 
-         "xg_for" = ifelse(name == "home", home_xg, away_xg), 
-         "xg_ag" = ifelse(name == "home", away_xg, home_xg), 
          "scored" = ifelse(name == "home", home_score, away_score), 
          "against" = ifelse(name == "home", away_score, home_score), 
+         "xpts" = ifelse(name == "home", home_xpts, away_xpts), 
+         "xg_for" = ifelse(name == "home", home_xg, away_xg), 
+         "xg_ag" = ifelse(name == "home", away_xg, home_xg),
          "pts_over_exp" = pts - xpts) |>
   group_by(team) |> 
-  summarize(gp = n(), across(scored:xpts, \(x) round(mean(x), 3)), 
+  summarize(gp = n(), across(pts:xg_ag, \(x) round(mean(x), 3)), 
             pts_over_exp = round(sum(pts_over_exp), 3)) |> 
   arrange(desc(xpts))
 ```

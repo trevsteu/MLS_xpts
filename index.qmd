@@ -24,66 +24,71 @@ library(reactable)
 # Code:
 
 ```{r, warning = FALSE, message=FALSE}
-url <- str_glue("https://fbref.com/en/comps/22/2025/schedule/2025-Major-League-Soccer-Scores-and-Fixtures")
-
 n <- 10000 # number of times to simulate each match
 set.seed(2025) # for reproducibility
 
-
-html <- read_html(url)
-html_table <- html |> 
-  html_element("table") |> 
-  html_table() 
-
-head(html_table)
-
-data <- html_table |> 
-  janitor::clean_names() |> 
-  filter(date != "Date" & score != "") |>
-  separate_wider_regex(score, patterns = c(home_score = "[0-9]+", "–", 
-                                    away_score = "[0-9]+")) |>
-    select("date", "home", "home_xg" = "x_g", "home_score", 
-           "away_score", "away_xg" = "x_g_2", "away") |> 
-    mutate("home_pts" = ifelse(home_score > away_score, 3, 
-                             ifelse(home_score == away_score, 1, 0)), 
-         "away_pts" = ifelse(away_score > home_score, 3, 
-                             ifelse(away_score == home_score, 1, 0))) |>
-  type_convert()
-
-head(data)
-
-home_xpts <- rep(NA, times = nrow(data))
-away_xpts <- rep(NA, times = nrow(data))
-for(i in 1:nrow(data)){
-  home_sim <- rpois(n, data$home_xg[i])
-  away_sim <- rpois(n, data$away_xg[i])
-  home_xpts[i] <- (3 * sum(home_sim > away_sim) + sum(home_sim == away_sim))/n
-  away_xpts[i] <- (3 * sum(away_sim > home_sim) + sum(away_sim == home_sim))/n
+get_data <- function(year){
+  url <- paste0("https://fbref.com/en/comps/22/", year, "/schedule/",
+                year, "-Major-League-Soccer-Scores-and-Fixtures")
+  html <- read_html(url)
+  html_table <- html |> 
+    html_element("table") |> 
+    html_table() 
+  
+  head(html_table)
+  
+  data <- html_table |> 
+    janitor::clean_names() |> 
+    filter(date != "Date" & score != "") |>
+    separate_wider_regex(score, patterns = c(home_score = "[0-9]+", "–", 
+                                      away_score = "[0-9]+")) |>
+      select("date", "home", "home_xg" = "x_g", "home_score", 
+             "away_score", "away_xg" = "x_g_2", "away") |> 
+      mutate("home_pts" = ifelse(home_score > away_score, 3, 
+                               ifelse(home_score == away_score, 1, 0)), 
+           "away_pts" = ifelse(away_score > home_score, 3, 
+                               ifelse(away_score == home_score, 1, 0))) |>
+    type_convert()
+  data
 }
 
-# combine table of results with simulated results
-data <- cbind(data, home_xpts, away_xpts) 
-
-xpts_table <- data |>
-  pivot_longer(cols = c("home", "away"), values_to = "team") |> 
-  mutate("pts" = ifelse(name == "home", home_pts, away_pts),
-         "scored" = ifelse(name == "home", home_score, away_score), 
-         "against" = ifelse(name == "home", away_score, home_score), 
-         "xpts" = ifelse(name == "home", home_xpts, away_xpts), 
-         "xg_for" = ifelse(name == "home", home_xg, away_xg), 
-         "xg_ag" = ifelse(name == "home", away_xg, home_xg),
-         "pts_over_exp" = pts - xpts) |>
-  group_by(team) |> 
-  summarize(gp = n(), across(pts:xg_ag, \(x) round(mean(x), 3)), 
-            pts_over_exp = round(sum(pts_over_exp), 3)) |> 
+xpts_table <- function(data){
+  home_xpts <- rep(NA, times = nrow(data))
+  away_xpts <- rep(NA, times = nrow(data))
+  for(i in 1:nrow(data)){
+    home_sim <- rpois(n, data$home_xg[i])
+    away_sim <- rpois(n, data$away_xg[i])
+    home_xpts[i] <- (3 * sum(home_sim > away_sim) + sum(home_sim == away_sim))/n
+    away_xpts[i] <- (3 * sum(away_sim > home_sim) + sum(away_sim == home_sim))/n
+  }
+  
+  # combine table of results with simulated results
+  data <- cbind(data, home_xpts, away_xpts) 
+  
+  xpts_table <- data |>
+    pivot_longer(cols = c("home", "away"), values_to = "team") |> 
+    mutate("pts" = ifelse(name == "home", home_pts, away_pts),
+           "scored" = ifelse(name == "home", home_score, away_score), 
+           "against" = ifelse(name == "home", away_score, home_score), 
+           "xpts" = ifelse(name == "home", home_xpts, away_xpts), 
+           "xg_for" = ifelse(name == "home", home_xg, away_xg), 
+           "xg_ag" = ifelse(name == "home", away_xg, home_xg),
+           "pts_over_exp" = pts - xpts) |>
+    group_by(team) |> 
+    summarize(gp = n(), across(pts:xg_ag, \(x) round(mean(x), 3)), 
+              pts_over_exp = round(sum(pts_over_exp), 3)) |> 
   arrange(desc(xpts))
+  xpts_table
+}
 ```
 
 # Expected Points Table
 
-```{r}
+```{r, message = FALSE}
 # use reactable to allow for interactive sorting
-reactable(xpts_table, pagination = FALSE)
+mls_2025 <- get_data(2025)
+mls_xpts_2025 <- xpts_table(mls_2025)
+reactable(mls_xpts_2025, pagination = FALSE)
 ```
 
 # Whitecaps Matches
@@ -92,7 +97,7 @@ reactable(xpts_table, pagination = FALSE)
 set.seed(2025)
 n <- 10000
 
-team_stats <- function(team){
+team_stats <- function(team, data){
   team_matches <- data |> 
     filter(home == team | away == team) |> 
     mutate(opponent = ifelse(home == team, str_c("vs ", away), 
@@ -127,5 +132,5 @@ team_stats <- function(team){
          "P Win" = team_pwin, "P Draw" = team_pdraw) |> 
   gt()
 }
-team_stats("Vancouver W'caps")
+team_stats("Vancouver W'caps", mls_2025)
 ```

@@ -5,15 +5,11 @@ format: html
 editor: visual
 ---
 
-# Motivation:
+## Motivation:
 
-<<<<<<< HEAD
-Note that his project is a work in progress. I will update as I have the time.
-=======
 Note that his project is a work in progress. I will update as I have the time. I am creating an RShiny app which will allow users to view whichever of this data they want (for any league with expected goal data on FBRef for that season).
->>>>>>> d92ee18 (test)
 
-# Setup:
+## Setup:
 
 ```{r, results = "hide", message=FALSE, warning=FALSE}
 library(tidyr)
@@ -25,11 +21,7 @@ library(scales)
 library(reactable)
 ```
 
-<<<<<<< HEAD
-# Code:
-=======
-# Code
->>>>>>> d92ee18 (test)
+## Code
 
 ```{r, warning = FALSE, message=FALSE}
 n <- 10000 # number of times to simulate each match
@@ -99,7 +91,7 @@ mls_xpts_2025 <- xpts_table(mls_2025)
 reactable(mls_xpts_2025, pagination = FALSE)
 ```
 
-# Whitecaps Matches
+## Whitecaps Matches
 
 ```{r}
 set.seed(2025)
@@ -137,14 +129,11 @@ team_stats <- function(team, data){
   team_matches |> 
     select("Date" = date, "Opponent" = opponent, "Result" = result, 
          "xGF" = team_xgf, "xGA" = team_xga, "xPts" = team_xpts, 
-<<<<<<< HEAD
          "P Win" = team_pwin, "P Draw" = team_pdraw) |> 
   gt()
 }
-team_stats("Vancouver W'caps", mls_2025)
-=======
-         "P Win" = team_pwin, "P Draw" = team_pdraw)
-}
+
+
 vwfc_stats <- team_stats("Vancouver W'caps", mls_2025)
 gt(vwfc_stats)
 ```
@@ -171,5 +160,4 @@ weekly_plot <- function(team_stats){
 }
 
 weekly_plot(vwfc_stats)
->>>>>>> d92ee18 (test)
 ```

@@ -157,7 +157,6 @@ weekly_plot <- function(team_stats){
     substr(x, nchar(x)-n+1, nchar(x))
   }
   
-  
   plot(x = match, y = vwfc_stats$xPts, 
        bg = ifelse(substrRight(vwfc_stats$Result, 1) == "W", "darkgreen", 
                    ifelse(substrRight(vwfc_stats$Result, 1) == "D", "yellow", 

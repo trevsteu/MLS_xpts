@@ -1,21 +1,4 @@
----
-title: "MLS Expected Points"
-author: Trevor S.
-format: html
-editor: visual
----
-
-# Motivation:
-
-<<<<<<< HEAD
-Note that his project is a work in progress. I will update as I have the time.
-=======
-Note that his project is a work in progress. I will update as I have the time. I am creating an RShiny app which will allow users to view whichever of this data they want (for any league with expected goal data on FBRef for that season).
->>>>>>> d92ee18 (test)
-
-# Setup:
-
-```{r, results = "hide", message=FALSE, warning=FALSE}
+library(shiny)
 library(tidyr)
 library(tidyverse)
 library(gt)
@@ -23,21 +6,22 @@ library(rvest)
 library(dplyr)
 library(scales)
 library(reactable)
-```
 
-<<<<<<< HEAD
-# Code:
-=======
-# Code
->>>>>>> d92ee18 (test)
-
-```{r, warning = FALSE, message=FALSE}
 n <- 10000 # number of times to simulate each match
 set.seed(2025) # for reproducibility
 
-get_data <- function(year){
-  url <- paste0("https://fbref.com/en/comps/22/", year, "/schedule/",
-                year, "-Major-League-Soccer-Scores-and-Fixtures")
+# ------------------------------------------------------------------------------------------------------
+
+get_data <- function(league, year){
+  leagues <- read.csv("C:\\Users\\tsteu\\Downloads\\MLS_xpts\\fbref_leagues.csv")
+  comp_num <- leagues |> 
+    filter(league == league_name) |> 
+    select(comp_num)
+  comp_name <- leagues |> 
+    filter(league == league_name) |> 
+    select(code)
+  url <- paste0("https://fbref.com/en/comps/", comp_num, "/", year, "/schedule/",
+                year, "-", comp_name, "-Scores-and-Fixtures")
   html <- read_html(url)
   html_table <- html |> 
     html_element("table") |> 
@@ -49,16 +33,18 @@ get_data <- function(year){
     janitor::clean_names() |> 
     filter(date != "Date" & score != "") |>
     separate_wider_regex(score, patterns = c(home_score = "[0-9]+", "–", 
-                                      away_score = "[0-9]+")) |>
-      select("date", "home", "home_xg" = "x_g", "home_score", 
-             "away_score", "away_xg" = "x_g_2", "away") |> 
-      mutate("home_pts" = ifelse(home_score > away_score, 3, 
+                                             away_score = "[0-9]+")) |>
+    select("date", "home", "home_xg" = "x_g", "home_score", 
+           "away_score", "away_xg" = "x_g_2", "away") |> 
+    mutate("home_pts" = ifelse(home_score > away_score, 3, 
                                ifelse(home_score == away_score, 1, 0)), 
            "away_pts" = ifelse(away_score > home_score, 3, 
                                ifelse(away_score == home_score, 1, 0))) |>
     type_convert()
   data
 }
+
+# ------------------------------------------------------------------------------------------------------
 
 xpts_table <- function(data){
   home_xpts <- rep(NA, times = nrow(data))
@@ -85,91 +71,63 @@ xpts_table <- function(data){
     group_by(team) |> 
     summarize(gp = n(), across(pts:xg_ag, \(x) round(mean(x), 3)), 
               pts_over_exp = round(sum(pts_over_exp), 3)) |> 
-  arrange(desc(xpts))
-  xpts_table
+    arrange(desc(xpts))
+  reactable(xpts_table)
 }
-```
 
-# Expected Points Table
+leagues <- read.csv("C:\\Users\\tsteu\\Downloads\\MLS_xpts\\fbref_leagues.csv")
 
-```{r, message = FALSE}
-# use reactable to allow for interactive sorting
-mls_2025 <- get_data(2025)
-mls_xpts_2025 <- xpts_table(mls_2025)
-reactable(mls_xpts_2025, pagination = FALSE)
-```
-
-# Whitecaps Matches
-
-```{r}
-set.seed(2025)
-n <- 10000
+# ------------------------------------------------------------------------------------------------------
 
 team_stats <- function(team, data){
   team_matches <- data |> 
     filter(home == team | away == team) |> 
     mutate(opponent = ifelse(home == team, str_c("vs ", away), 
                              str_c("@ ", home)), 
-         team_gf = ifelse(home == team, home_score, away_score),
-         team_ga = ifelse(home == team, away_score, home_score),
-         team_xgf = ifelse(home == team, home_xg, away_xg),
-         team_xga = ifelse(home == team, away_xg, home_xg),
-         res = ifelse(team_gf > team_ga, "W", 
-                      ifelse(team_gf == team_ga, "D", "L")), 
-         result = str_c(team_gf, "-", team_ga, " ", res)) |> 
+           team_gf = ifelse(home == team, home_score, away_score),
+           team_ga = ifelse(home == team, away_score, home_score),
+           team_xgf = ifelse(home == team, home_xg, away_xg),
+           team_xga = ifelse(home == team, away_xg, home_xg),
+           res = ifelse(team_gf > team_ga, "W", 
+                        ifelse(team_gf == team_ga, "D", "L")), 
+           result = str_c(team_gf, "-", team_ga, " ", res)) |> 
     select(date, opponent, result, team_xgf, team_xga)
-
+  
   team_pwin <- rep(NA, times = nrow(team_matches))
   team_pdraw <- rep(NA, times = nrow(team_matches))
   team_xpts <- rep(NA, times = nrow(team_matches))
   
-
+  
   for(i in 1:nrow(team_matches)){
     team_sim <- rpois(n, team_matches$team_xgf[i])
     opp_sim <- rpois(n, team_matches$team_xga[i])
     team_pwin[i] <- label_percent(accuracy = 0.01)(round(sum(team_sim > opp_sim) / n, 4))
     team_pdraw[i] <- label_percent(accuracy = 0.01)(round(sum(team_sim == opp_sim) / n, 4))
     team_xpts[i] <- round((3*sum(team_sim > opp_sim) + 
-                          sum(team_sim == opp_sim))/n, 3)
+                             sum(team_sim == opp_sim))/n, 3)
   }
   team_matches <- cbind(team_matches, team_pwin, team_pdraw, team_xpts)
-
+  
   team_matches |> 
     select("Date" = date, "Opponent" = opponent, "Result" = result, 
-         "xGF" = team_xgf, "xGA" = team_xga, "xPts" = team_xpts, 
-<<<<<<< HEAD
-         "P Win" = team_pwin, "P Draw" = team_pdraw) |> 
-  gt()
-}
-team_stats("Vancouver W'caps", mls_2025)
-=======
-         "P Win" = team_pwin, "P Draw" = team_pdraw)
-}
-vwfc_stats <- team_stats("Vancouver W'caps", mls_2025)
-gt(vwfc_stats)
-```
-
-# Plot by Match
-
-```{r}
-weekly_plot <- function(team_stats){
-  match = 1:nrow(team_stats)
-  team_plot <- cbind(team_stats, match)
-  
-  substrRight <- function(x, n){
-    substr(x, nchar(x)-n+1, nchar(x))
-  }
-  
-  
-  plot(x = match, y = vwfc_stats$xPts, 
-       bg = ifelse(substrRight(vwfc_stats$Result, 1) == "W", "darkgreen", 
-                   ifelse(substrRight(vwfc_stats$Result, 1) == "D", "yellow", 
-                          "red")), pch = 21)
-  abline(h = mean(team_stats$xPts), col = "blue", lwd = 2)
-  abline(h = sum(mls_xpts_2025$xpts * mls_xpts_2025$gp)/
-           sum(mls_xpts_2025$gp), col = "red", lwd = 2) 
+           "xGF" = team_xgf, "xGA" = team_xga, "xPts" = team_xpts, 
+           "P Win" = team_pwin, "P Draw" = team_pdraw)
 }
 
-weekly_plot(vwfc_stats)
->>>>>>> d92ee18 (test)
-```
+# ------------------------------------------------------------------------------------------------------
+
+
+leagues <- read.csv("C:\\Users\\tsteu\\Downloads\\MLS_xpts\\fbref_leagues.csv")
+
+ui <- fluidPage(
+      radioButtons("league", "Select a league:", leagues$league_name))
+server <- function(input, output, session) {
+  output$year <- renderUI({
+    radioButtons("year", strsplit(filter(leagues, league_name == input$league)[years]), 
+                 ",\\s*")
+  })
+  renderTable(xpts_table(get_data(input$league, output$year)))
+}
+shinyApp(ui, server)
+
+   

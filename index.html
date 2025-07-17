@@ -121,7 +121,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="motivation" class="level1">
 <h1>Motivation:</h1>
+<<<<<<< HEAD
 <p>Note that his project is a work in progress. I will update as I have the time.</p>
+=======
+<p>Note that his project is a work in progress. I will update as I have the time. I am creating an RShiny app which will allow users to view whichever of this data they want (for any league with expected goal data on FBRef for that season).</p>
+>>>>>>> d92ee18 (test)
 </section>
 <section id="setup" class="level1">
 <h1>Setup:</h1>
@@ -136,7 +140,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="code" class="level1">
+<<<<<<< HEAD
 <h1>Code:</h1>
+=======
+<h1>Code</h1>
+>>>>>>> d92ee18 (test)
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co"># number of times to simulate each match</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>) <span class="co"># for reproducibility</span></span>
@@ -204,8 +212,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mls_xpts_2025 <span class="ot">&lt;-</span> <span class="fu">xpts_table</span>(mls_2025)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">reactable</span>(mls_xpts_2025, <span class="at">pagination =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
+<<<<<<< HEAD
 <div class="reactable html-widget html-fill-item" id="htmlwidget-900c5c632c22f1753cf7" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-900c5c632c22f1753cf7">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"team":["LAFC","Nashville SC","San Diego FC","Philadelphia Union","Vancouver W'caps","Orlando City","Columbus Crew","SJ Earthquakes","Seattle Sounders","Minnesota Utd","Inter Miami","NYCFC","Austin","Chicago Fire","Charlotte","NY Red Bulls","Houston Dynamo","FC Cincinnati","Atlanta Utd","FC Dallas","St. Louis","Colorado Rapids","NE Revolution","Real Salt Lake","CF Montréal","Portland Timbers","D.C. United","LA Galaxy","Toronto FC","Sporting KC"],"gp":[18,21,21,21,20,21,21,21,20,21,18,20,20,20,21,21,21,21,20,20,21,22,20,20,21,20,21,21,20,21],"pts":[1.611,1.952,1.857,1.905,1.9,1.619,1.81,1.333,1.5,1.762,1.944,1.55,1.3,1.4,1.238,1.429,1.238,2,0.9,1.05,0.714,1.182,1.2,1.1,0.667,1.65,0.905,0.571,0.85,1.095],"scored":[1.833,1.762,2.095,1.667,1.75,1.857,1.619,1.952,1.4,1.667,2.333,1.35,0.75,1.95,1.619,1.571,1.381,1.571,1.1,1.35,1,1.091,1.3,1.1,0.857,1.5,0.81,1.048,1.15,1.571],"against":[1.333,1.095,1.381,1,1.1,1.333,1.286,1.571,1.3,1.143,1.611,1.1,1.15,1.8,1.714,1.19,1.619,1.286,1.85,1.85,1.619,1.5,1.25,1.4,1.905,1.4,1.857,2,1.4,1.81],"xpts":[1.75,1.739,1.712,1.705,1.675,1.642,1.577,1.574,1.553,1.544,1.532,1.493,1.423,1.419,1.374,1.364,1.321,1.298,1.274,1.264,1.228,1.224,1.218,1.186,1.178,1.15,1.147,1.135,1.022,0.834],"xg_for":[1.733,1.81,1.738,1.586,1.6,1.733,1.671,1.967,1.445,1.433,1.75,1.495,1.25,1.635,1.567,1.367,1.252,1.281,1.35,1.385,1.324,1.4,1.25,1.255,1.186,1.225,1.1,1.214,0.985,1.005],"xg_ag":[1.083,1.138,1.343,1.1,1.02,1.29,1.371,1.657,1.14,1.148,1.528,1.235,1.26,1.725,1.595,1.338,1.319,1.505,1.545,1.54,1.61,1.632,1.425,1.645,1.51,1.57,1.467,1.667,1.5,1.986],"pts_over_exp":[-2.492,4.487,3.053,4.205,4.498,-0.484,4.891,-5.057,-1.057,4.573,7.424,1.145,-2.45,-0.371,-2.848,1.352,-1.737,14.746,-7.484,-4.278,-10.78,-0.92,-0.351,-1.73,-10.728,10.005,-5.078,-11.838,-3.434,5.49]},"columns":[{"id":"team","name":"team","type":"character"},{"id":"gp","name":"gp","type":"numeric"},{"id":"pts","name":"pts","type":"numeric"},{"id":"scored","name":"scored","type":"numeric"},{"id":"against","name":"against","type":"numeric"},{"id":"xpts","name":"xpts","type":"numeric"},{"id":"xg_for","name":"xg_for","type":"numeric"},{"id":"xg_ag","name":"xg_ag","type":"numeric"},{"id":"pts_over_exp","name":"pts_over_exp","type":"numeric"}],"pagination":false,"dataKey":"dd70c1e648facd67ba7c5a8a1299990a"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+=======
+<div class="reactable html-widget html-fill-item" id="htmlwidget-4e2df9bcc566625ec951" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-4e2df9bcc566625ec951">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"team":["LAFC","Philadelphia Union","Nashville SC","Vancouver W'caps","San Diego FC","Orlando City","Columbus Crew","Minnesota Utd","Inter Miami","Seattle Sounders","SJ Earthquakes","NYCFC","Chicago Fire","Charlotte","Austin","NY Red Bulls","Houston Dynamo","FC Cincinnati","Colorado Rapids","Atlanta Utd","FC Dallas","St. Louis","CF Montréal","NE Revolution","Real Salt Lake","LA Galaxy","Portland Timbers","D.C. United","Toronto FC","Sporting KC"],"gp":[20,23,23,22,23,23,23,23,20,22,23,22,22,23,22,23,23,23,24,22,22,22,23,22,22,23,22,23,22,22],"pts":[1.75,2,1.913,1.864,1.826,1.522,1.783,1.739,1.9,1.545,1.261,1.545,1.318,1.391,1.364,1.435,1.13,1.957,1.25,0.909,1,0.818,0.652,1.136,1.273,0.652,1.5,0.826,0.955,1.045],"scored":[1.8,1.696,1.783,1.727,2,1.783,1.652,1.696,2.2,1.545,1.913,1.318,1.909,1.652,0.773,1.652,1.261,1.652,1.25,1.136,1.318,1.045,0.87,1.318,1.091,1.087,1.409,0.826,1.136,1.591],"against":[1.2,0.957,1.087,1.136,1.348,1.348,1.391,1.13,1.65,1.409,1.696,1.136,1.818,1.609,1.091,1.304,1.652,1.348,1.5,1.818,1.864,1.591,1.87,1.364,1.273,1.957,1.409,1.87,1.318,1.864],"xpts":[1.791,1.728,1.719,1.649,1.64,1.623,1.55,1.534,1.52,1.508,1.493,1.467,1.457,1.424,1.404,1.342,1.301,1.294,1.288,1.283,1.275,1.262,1.208,1.206,1.188,1.175,1.15,1.118,1.05,0.873],"xg_for":[1.745,1.626,1.787,1.591,1.652,1.717,1.635,1.452,1.675,1.518,1.904,1.5,1.65,1.596,1.277,1.409,1.239,1.252,1.496,1.336,1.418,1.368,1.191,1.314,1.245,1.252,1.218,1.087,0.968,1.109],"xg_ag":[1.045,1.096,1.143,1.073,1.343,1.291,1.387,1.17,1.47,1.305,1.748,1.295,1.668,1.535,1.309,1.426,1.339,1.465,1.621,1.518,1.555,1.595,1.47,1.527,1.623,1.639,1.564,1.513,1.441,2.018],"pts_over_exp":[-0.813,6.25,4.47,4.712,4.276,-2.334,5.35,4.712,7.606,0.829,-5.333,1.724,-3.057,-0.743,-0.894,2.141,-3.912,15.247,-0.917,-8.218,-6.04,-9.774,-12.782,-1.541,1.87,-12.023,7.707,-6.723,-2.098,3.797]},"columns":[{"id":"team","name":"team","type":"character"},{"id":"gp","name":"gp","type":"numeric"},{"id":"pts","name":"pts","type":"numeric"},{"id":"scored","name":"scored","type":"numeric"},{"id":"against","name":"against","type":"numeric"},{"id":"xpts","name":"xpts","type":"numeric"},{"id":"xg_for","name":"xg_for","type":"numeric"},{"id":"xg_ag","name":"xg_ag","type":"numeric"},{"id":"pts_over_exp","name":"pts_over_exp","type":"numeric"}],"pagination":false,"dataKey":"ba6d90a4b88b800a29b2d2be9337f11a"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+>>>>>>> d92ee18 (test)
 </div>
 </div>
 </section>
@@ -247,6 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  team_matches <span class="sc">|&gt;</span> </span>
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="st">"Date"</span> <span class="ot">=</span> date, <span class="st">"Opponent"</span> <span class="ot">=</span> opponent, <span class="st">"Result"</span> <span class="ot">=</span> result, </span>
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>         <span class="st">"xGF"</span> <span class="ot">=</span> team_xgf, <span class="st">"xGA"</span> <span class="ot">=</span> team_xga, <span class="st">"xPts"</span> <span class="ot">=</span> team_xpts, </span>
+<<<<<<< HEAD
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>         <span class="st">"P Win"</span> <span class="ot">=</span> team_pwin, <span class="st">"P Draw"</span> <span class="ot">=</span> team_pdraw) <span class="sc">|&gt;</span> </span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>()</span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>}</span>
@@ -254,21 +268,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div id="ydleppntxo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ydleppntxo table {
+=======
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>         <span class="st">"P Win"</span> <span class="ot">=</span> team_pwin, <span class="st">"P Draw"</span> <span class="ot">=</span> team_pdraw)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>vwfc_stats <span class="ot">&lt;-</span> <span class="fu">team_stats</span>(<span class="st">"Vancouver W'caps"</span>, mls_2025)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="fu">gt</span>(vwfc_stats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="kpdhfkxuve" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kpdhfkxuve table {
+>>>>>>> d92ee18 (test)
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+<<<<<<< HEAD
 #ydleppntxo thead, #ydleppntxo tbody, #ydleppntxo tfoot, #ydleppntxo tr, #ydleppntxo td, #ydleppntxo th {
   border-style: none;
 }
 
 #ydleppntxo p {
+=======
+#kpdhfkxuve thead, #kpdhfkxuve tbody, #kpdhfkxuve tfoot, #kpdhfkxuve tr, #kpdhfkxuve td, #kpdhfkxuve th {
+  border-style: none;
+}
+
+#kpdhfkxuve p {
+>>>>>>> d92ee18 (test)
   margin: 0;
   padding: 0;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_table {
+=======
+#kpdhfkxuve .gt_table {
+>>>>>>> d92ee18 (test)
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -294,12 +329,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_caption {
+=======
+#kpdhfkxuve .gt_caption {
+>>>>>>> d92ee18 (test)
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_title {
+=======
+#kpdhfkxuve .gt_title {
+>>>>>>> d92ee18 (test)
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -311,7 +354,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_subtitle {
+=======
+#kpdhfkxuve .gt_subtitle {
+>>>>>>> d92ee18 (test)
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -323,7 +370,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_heading {
+=======
+#kpdhfkxuve .gt_heading {
+>>>>>>> d92ee18 (test)
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -335,13 +386,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_bottom_border {
+=======
+#kpdhfkxuve .gt_bottom_border {
+>>>>>>> d92ee18 (test)
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_col_headings {
+=======
+#kpdhfkxuve .gt_col_headings {
+>>>>>>> d92ee18 (test)
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -356,7 +415,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_col_heading {
+=======
+#kpdhfkxuve .gt_col_heading {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -376,7 +439,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_column_spanner_outer {
+=======
+#kpdhfkxuve .gt_column_spanner_outer {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -388,6 +455,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
@@ -397,6 +465,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 
 #ydleppntxo .gt_column_spanner {
+=======
+#kpdhfkxuve .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kpdhfkxuve .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kpdhfkxuve .gt_column_spanner {
+>>>>>>> d92ee18 (test)
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -408,11 +487,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
 #ydleppntxo .gt_group_heading {
+=======
+#kpdhfkxuve .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kpdhfkxuve .gt_group_heading {
+>>>>>>> d92ee18 (test)
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -438,7 +525,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_empty_group_heading {
+=======
+#kpdhfkxuve .gt_empty_group_heading {
+>>>>>>> d92ee18 (test)
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -453,6 +544,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_from_md > :first-child {
   margin-top: 0;
 }
@@ -462,6 +554,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 
 #ydleppntxo .gt_row {
+=======
+#kpdhfkxuve .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kpdhfkxuve .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kpdhfkxuve .gt_row {
+>>>>>>> d92ee18 (test)
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -480,7 +583,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_stub {
+=======
+#kpdhfkxuve .gt_stub {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -493,7 +600,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_stub_row_group {
+=======
+#kpdhfkxuve .gt_stub_row_group {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -507,6 +618,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_row_group_first td {
   border-top-width: 2px;
 }
@@ -516,6 +628,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 
 #ydleppntxo .gt_summary_row {
+=======
+#kpdhfkxuve .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kpdhfkxuve .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kpdhfkxuve .gt_summary_row {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -525,16 +648,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_first_summary_row {
+=======
+#kpdhfkxuve .gt_first_summary_row {
+>>>>>>> d92ee18 (test)
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
 #ydleppntxo .gt_last_summary_row {
+=======
+#kpdhfkxuve .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kpdhfkxuve .gt_last_summary_row {
+>>>>>>> d92ee18 (test)
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -544,7 +679,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_grand_summary_row {
+=======
+#kpdhfkxuve .gt_grand_summary_row {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -554,7 +693,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_first_grand_summary_row {
+=======
+#kpdhfkxuve .gt_first_grand_summary_row {
+>>>>>>> d92ee18 (test)
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -564,7 +707,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_last_grand_summary_row_top {
+=======
+#kpdhfkxuve .gt_last_grand_summary_row_top {
+>>>>>>> d92ee18 (test)
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -574,11 +721,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
 #ydleppntxo .gt_table_body {
+=======
+#kpdhfkxuve .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kpdhfkxuve .gt_table_body {
+>>>>>>> d92ee18 (test)
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -587,7 +742,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_footnotes {
+=======
+#kpdhfkxuve .gt_footnotes {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -601,7 +760,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_footnote {
+=======
+#kpdhfkxuve .gt_footnote {
+>>>>>>> d92ee18 (test)
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -610,7 +773,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_sourcenotes {
+=======
+#kpdhfkxuve .gt_sourcenotes {
+>>>>>>> d92ee18 (test)
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -624,7 +791,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_sourcenote {
+=======
+#kpdhfkxuve .gt_sourcenote {
+>>>>>>> d92ee18 (test)
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -632,6 +803,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_left {
   text-align: left;
 }
@@ -641,10 +813,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 
 #ydleppntxo .gt_right {
+=======
+#kpdhfkxuve .gt_left {
+  text-align: left;
+}
+
+#kpdhfkxuve .gt_center {
+  text-align: center;
+}
+
+#kpdhfkxuve .gt_right {
+>>>>>>> d92ee18 (test)
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_font_normal {
   font-weight: normal;
 }
@@ -662,16 +846,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 
 #ydleppntxo .gt_footnote_marks {
+=======
+#kpdhfkxuve .gt_font_normal {
+  font-weight: normal;
+}
+
+#kpdhfkxuve .gt_font_bold {
+  font-weight: bold;
+}
+
+#kpdhfkxuve .gt_font_italic {
+  font-style: italic;
+}
+
+#kpdhfkxuve .gt_super {
+  font-size: 65%;
+}
+
+#kpdhfkxuve .gt_footnote_marks {
+>>>>>>> d92ee18 (test)
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_asterisk {
+=======
+#kpdhfkxuve .gt_asterisk {
+>>>>>>> d92ee18 (test)
   font-size: 100%;
   vertical-align: 0;
 }
 
+<<<<<<< HEAD
 #ydleppntxo .gt_indent_1 {
   text-indent: 5px;
 }
@@ -693,11 +901,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 
 #ydleppntxo .katex-display {
+=======
+#kpdhfkxuve .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kpdhfkxuve .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kpdhfkxuve .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kpdhfkxuve .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kpdhfkxuve .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#kpdhfkxuve .katex-display {
+>>>>>>> d92ee18 (test)
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
+<<<<<<< HEAD
 #ydleppntxo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+=======
+#kpdhfkxuve div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+>>>>>>> d92ee18 (test)
   height: 0px !important;
 }
 </style>
@@ -916,6 +1151,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_right" headers="P Win">14.19%</td>
 <td class="gt_row gt_right" headers="P Draw">27.73%</td>
 </tr>
+<<<<<<< HEAD
+=======
+<tr class="odd">
+<td class="gt_row gt_right" headers="Date">2025-07-12</td>
+<td class="gt_row gt_left" headers="Opponent">@ Colorado Rapids</td>
+<td class="gt_row gt_left" headers="Result">0-3 L</td>
+<td class="gt_row gt_right" headers="xGF">1.2</td>
+<td class="gt_row gt_right" headers="xGA">2.5</td>
+<td class="gt_row gt_right" headers="xPts">0.666</td>
+<td class="gt_row gt_right" headers="P Win">16.34%</td>
+<td class="gt_row gt_right" headers="P Draw">17.62%</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Date">2025-07-16</td>
+<td class="gt_row gt_left" headers="Opponent">@ Houston Dynamo</td>
+<td class="gt_row gt_left" headers="Result">3-0 W</td>
+<td class="gt_row gt_right" headers="xGF">1.8</td>
+<td class="gt_row gt_right" headers="xGA">0.7</td>
+<td class="gt_row gt_right" headers="xPts">2.140</td>
+<td class="gt_row gt_right" headers="P Win">63.85%</td>
+<td class="gt_row gt_right" headers="P Draw">22.46%</td>
+</tr>
+>>>>>>> d92ee18 (test)
 </tbody>
 </table>
 
@@ -923,6 +1181,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+<<<<<<< HEAD
+=======
+<section id="plot-by-match" class="level1">
+<h1>Plot by Match</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>weekly_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(team_stats){</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  match <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(team_stats)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  team_plot <span class="ot">&lt;-</span> <span class="fu">cbind</span>(team_stats, match)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  substrRight <span class="ot">&lt;-</span> <span class="cf">function</span>(x, n){</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">substr</span>(x, <span class="fu">nchar</span>(x)<span class="sc">-</span>n<span class="sc">+</span><span class="dv">1</span>, <span class="fu">nchar</span>(x))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">x =</span> match, <span class="at">y =</span> vwfc_stats<span class="sc">$</span>xPts, </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">bg =</span> <span class="fu">ifelse</span>(<span class="fu">substrRight</span>(vwfc_stats<span class="sc">$</span>Result, <span class="dv">1</span>) <span class="sc">==</span> <span class="st">"W"</span>, <span class="st">"darkgreen"</span>, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">ifelse</span>(<span class="fu">substrRight</span>(vwfc_stats<span class="sc">$</span>Result, <span class="dv">1</span>) <span class="sc">==</span> <span class="st">"D"</span>, <span class="st">"yellow"</span>, </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"red"</span>)), <span class="at">pch =</span> <span class="dv">21</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(team_stats<span class="sc">$</span>xPts), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">sum</span>(mls_xpts_2025<span class="sc">$</span>xpts <span class="sc">*</span> mls_xpts_2025<span class="sc">$</span>gp)<span class="sc">/</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>           <span class="fu">sum</span>(mls_xpts_2025<span class="sc">$</span>gp), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>) </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">weekly_plot</span>(vwfc_stats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+>>>>>>> d92ee18 (test)
 
 </main>
 <!-- /main column -->

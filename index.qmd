@@ -5,11 +5,19 @@ format: html
 editor: visual
 ---
 
+<<<<<<< HEAD
 ## Motivation:
 
 Note that his project is a work in progress. I will update as I have the time. I am creating an RShiny app which will allow users to view whichever of this data they want (for any league with expected goal data on FBRef for that season).
 
 ## Setup:
+=======
+## Motivation
+
+Note that his project is a work in progress. I will update as I have the time. I am creating an RShiny app which will allow users to view whichever of this data they want (for any league with expected goal data on FBRef for that season).
+
+## Setup
+>>>>>>> dcbefc4 (updated match plot)
 
 ```{r, results = "hide", message=FALSE, warning=FALSE}
 library(tidyr)
@@ -82,7 +90,7 @@ xpts_table <- function(data){
 }
 ```
 
-# Expected Points Table
+## Expected Points Table
 
 ```{r, message = FALSE}
 # use reactable to allow for interactive sorting
@@ -138,7 +146,7 @@ vwfc_stats <- team_stats("Vancouver W'caps", mls_2025)
 gt(vwfc_stats)
 ```
 
-# Plot by Match
+## Plot by Match
 
 ```{r}
 weekly_plot <- function(team_stats){

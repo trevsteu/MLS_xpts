@@ -5,11 +5,11 @@ format: html
 editor: visual
 ---
 
-## Motivation:
+# Motivation
 
 Note that his project is a work in progress. I will update as I have the time. I am creating an RShiny app which will allow users to view whichever of this data they want (for any league with expected goal data on FBRef for that season).
 
-## Setup:
+# Setup
 
 ```{r, results = "hide", message=FALSE, warning=FALSE}
 library(tidyr)
@@ -21,7 +21,7 @@ library(scales)
 library(reactable)
 ```
 
-## Code
+# Code
 
 ```{r, warning = FALSE, message=FALSE}
 n <- 10000 # number of times to simulate each match
@@ -91,7 +91,7 @@ mls_xpts_2025 <- xpts_table(mls_2025)
 reactable(mls_xpts_2025, pagination = FALSE)
 ```
 
-## Whitecaps Matches
+# Whitecaps Matches
 
 ```{r}
 set.seed(2025)

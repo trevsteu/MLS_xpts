@@ -1,9 +1,21 @@
 ---
 title: "MLS Expected Points"
 author: Trevor S.
-format: html
+format: 
+ html:  
+  code-fold: true
 editor: visual
 ---
+
+```{r, echo=FALSE, results = "hide", message=FALSE, warning=FALSE}
+install.packages("tidyr")
+install.packages("tidyverse")
+install.packages("gt")
+install.packages("rvest")
+install.packages("dplyr")
+install.packages("scales")
+install.packages("reactable")
+```
 
 # Motivation
 

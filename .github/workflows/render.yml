@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
+    - name: Install Quarto
+    - uses: quarto-dev/quarto-actions/setup@v2
+
       - name: Checkout repo
         uses: actions/checkout@v3
 

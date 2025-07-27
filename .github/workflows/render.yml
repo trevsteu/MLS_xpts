@@ -1,5 +1,8 @@
 name: Render Report Nightly
 
+permissions:
+  contents: write
+  
 on:
   schedule:
     - cron: '0 7 * * *'  # Runs every day at 2am EST

@@ -15,6 +15,7 @@ install.packages("rvest")
 install.packages("dplyr")
 install.packages("scales")
 install.packages("reactable")
+install.packages("janitor")
 ```
 
 # Motivation
@@ -31,6 +32,7 @@ library(rvest)
 library(dplyr)
 library(scales)
 library(reactable)
+library(janitor)
 ```
 
 # Code

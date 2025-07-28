@@ -4,6 +4,9 @@ author: Trevor S.
 format: 
  html:  
   code-fold: true
+  self-contained: true
+  theme: cosmo    # optional: nicer Bootstrap theme
+  highlight-style: github
 editor: visual
 ---
 
